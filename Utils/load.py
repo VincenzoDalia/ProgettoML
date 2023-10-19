@@ -1,5 +1,5 @@
 import numpy
-from utils import *
+from Utils.utils import *
 
 
 def load(fname):
