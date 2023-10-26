@@ -14,6 +14,6 @@ num_male_test = numpy.count_nonzero(test_label == 0)
 num_female_test = numpy.count_nonzero(test_label == 1)
 
 print(
-    "        TRAIN     TEST\n" +
+    "        TRAIN     TESTanalysis\n" +
     f"MALE     {num_male_train}      {num_male_test}\n" +
     f"FEMALE   {num_female_train}     {num_female_test}\n ")
