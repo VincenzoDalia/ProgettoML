@@ -67,13 +67,10 @@ def plot_centered_hist(dataset, label):
         11: "Feature 12",
     }
 
-    # axs = plt.subplots(len(hFea), 1, figsize=(10, 50))[1]
-
     for dIdx, h in hFea.items():
+        
+        ax = plt.subplots()[1]
 
-        ax = plt.plot()
-
-        # ax = axs[dIdx]
         ax.set_xlabel(h, fontsize=10, fontweight="bold")
         ax.set_ylabel("Probability Density", fontsize=10, fontweight="bold")
 
@@ -100,7 +97,7 @@ def plot_centered_hist(dataset, label):
         ax.legend()
 
         plt.tight_layout()
-        plt.savefig("Dataset/Analysis/Histograms/hist_%d.pdf" % dIdx)
+        plt.savefig("Dataset/Analysis/Histograms/hist_{}.pdf".format(dIdx))
 
 
 plot_centered_hist(training_data, training_label)
