@@ -1,4 +1,5 @@
 from Utils.load import *
+import numpy as np
 
 
 # Loading Dataset
@@ -17,3 +18,5 @@ print(
     "        TRAIN     TESTanalysis\n" +
     f"MALE     {num_male_train}      {num_male_test}\n" +
     f"FEMALE   {num_female_train}     {num_female_test}\n ")
+
+print(np.shape(training_data))
