@@ -1,5 +1,6 @@
 from Utils.load import *
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 # Loading Dataset
@@ -9,6 +10,9 @@ test_data, test_label = load('./Dataset/Test.txt')
 
 num_features, tot_train = np.shape(training_data)
 tot_test = np.shape(test_data)[1]
+
+
+# ------------------- DATASET ANALYSIS ------------------- #
 
 print(f"The number of features is {num_features}")
 
@@ -40,3 +44,59 @@ print(
     "        TRAIN     TESTmain\n" +
     f"MALE     {num_male_train}      {num_male_test}\n" +
     f"FEMALE   {num_female_train}     {num_female_test}\n ")
+
+
+
+# ------------------- FEATURE ANALYSIS ------------------- #
+def plot_centered_hist(dataset, label):
+    
+    D0 = dataset[:, label == 0]
+    D1 = dataset[:, label == 1]
+
+    hFea = {
+        0: "Feature 1",
+        1: "Feature 2",
+        2: "Feature 3",
+        3: "Feature 4",
+        4: "Feature 5",
+        5: "Feature 6",
+        6: "Feature 7",
+        7: "Feature 8",
+        8: "Feature 9",
+        9: "Feature 10",
+        10: "Feature 11",
+        11: "Feature 12",
+    }
+
+    fig,axs = plt.subplots(len(hFea), 1, figsize=(6, 10))
+
+    for dIdx, h in hFea.items():
+        ax = axs[dIdx]
+        ax.set_xlabel(h, fontsize=10, fontweight="bold")
+        ax.set_ylabel("Probability Density", fontsize=10, fontweight="bold")
+
+        ax.hist(
+            D0[dIdx, :],
+            bins=80,
+            density=True,
+            alpha=0.4,
+            label="Male",
+            linewidth=0.3,
+            edgecolor="black",
+        )
+        ax.hist(
+            D1[dIdx, :],
+            bins=80,
+            density=True,
+            alpha=0.4,
+            label="Female",
+            linewidth=0.3,
+            edgecolor="black",
+            color="red",
+        )
+
+        ax.legend()
+
+    plt.tight_layout()
+    plt.savefig("Dataset/Analysis/Histograms/hist_%d.pdf", dIdx )
+    

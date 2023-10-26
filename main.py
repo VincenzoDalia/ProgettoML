@@ -1,4 +1,5 @@
 from Utils.load import *
+from Dataset.Analysis.analysis import *
 import numpy as np
 
 
@@ -41,3 +42,6 @@ if __name__ == '__main__':
         "        TRAIN     TESTmain\n" +
         f"MALE     {num_male_train}      {num_male_test}\n" +
         f"FEMALE   {num_female_train}     {num_female_test}\n ")
+    
+    
+    plot_centered_hist(training_data, training_label)
