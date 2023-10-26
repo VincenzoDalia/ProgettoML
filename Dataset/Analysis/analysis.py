@@ -49,6 +49,11 @@ print(
 # ------------------- FEATURE ANALYSIS ------------------- #
 def plot_centered_hist(dataset, label):
 
+    mean = np.mean(dataset, axis=1, keepdims=True)
+
+    if mean != 0:
+        dataset = dataset - mean
+
     D0 = dataset[:, label == 0]
     D1 = dataset[:, label == 1]
 
@@ -68,7 +73,7 @@ def plot_centered_hist(dataset, label):
     }
 
     for dIdx, h in hFea.items():
-        
+
         ax = plt.subplots()[1]
 
         ax.set_xlabel(h, fontsize=10, fontweight="bold")
