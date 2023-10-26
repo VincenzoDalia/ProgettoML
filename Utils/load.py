@@ -1,12 +1,13 @@
 import numpy
 from Utils.utils import *
-#ciao
+
+
 def load(fname):
-    #dataList contains the attributes during the elaboration of the file
+    # dataList contains the attributes during the elaboration of the file
     dataList = []
-    #labelsList contains the labels during the elaboration
+    # labelsList contains the labels during the elaboration
     labelsList = []
-    #LabelMapping parse from string to int
+    # LabelMapping parse from string to int
     labelMapping = {"0": 0, "1": 1}
 
     try:
@@ -16,8 +17,9 @@ def load(fname):
                 elements = line.strip().split(',')
 
                 # The first 12 elements are attributes and convert them to float
-                attributes = numpy.array([float(element) for element in elements][0:12])
-                
+                attributes = numpy.array([float(element)
+                                         for element in elements][0:12])
+
                 attributes = mcol(attributes)
 
                 # Extract the label, which is the last element on the line
@@ -45,4 +47,4 @@ def load(fname):
     # Convert the labels list to a numpy array with dtype int32
     labels = numpy.array(labelsList, dtype=numpy.int32)
 
-    return attributes,labels
+    return attributes, labels
