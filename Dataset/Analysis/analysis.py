@@ -68,7 +68,7 @@ def plot_centered_hist(dataset, label):
         11: "Feature 12",
     }
 
-    fig,axs = plt.subplots(len(hFea), 1, figsize=(6, 10))
+    axs = plt.subplots(len(hFea), 1, figsize=(10, 50))[1]
 
     for dIdx, h in hFea.items():
         ax = axs[dIdx]
@@ -98,5 +98,7 @@ def plot_centered_hist(dataset, label):
         ax.legend()
 
     plt.tight_layout()
-    plt.savefig("Dataset/Analysis/Histograms/hist_%d.pdf", dIdx )
+    plt.savefig("Dataset/Analysis/Histograms/hist_%d.pdf" % dIdx )
+    
+plot_centered_hist(training_data, training_label)
     
