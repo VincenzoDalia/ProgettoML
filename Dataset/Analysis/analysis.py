@@ -47,17 +47,18 @@ print(
 
 
 # ------------------- FEATURE ANALYSIS ------------------- #
-def plot_centered_hist(dataset, label):
+def plot_histogram(dataset, label):
 
+    #Center data
     mean = np.mean(dataset, axis=1, keepdims=True)
 
-    if mean != 0:
+    if mean.any() != 0:
         dataset = dataset - mean
 
-    D0 = dataset[:, label == 0]
-    D1 = dataset[:, label == 1]
+    dataMale = dataset[:, label == 0]
+    dataFemale = dataset[:, label == 1]
 
-    hFea = {
+    features = {
         0: "Feature 1",
         1: "Feature 2",
         2: "Feature 3",
@@ -72,27 +73,28 @@ def plot_centered_hist(dataset, label):
         11: "Feature 12",
     }
 
-    for dIdx, h in hFea.items():
+    for index, f in features.items():
 
         ax = plt.subplots()[1]
 
-        ax.set_xlabel(h, fontsize=10, fontweight="bold")
+        ax.set_xlabel(f, fontsize=10, fontweight="bold")
         ax.set_ylabel("Probability Density", fontsize=10, fontweight="bold")
 
         ax.hist(
-            D0[dIdx, :],
-            bins=80,
+            dataMale[index, :],
+            bins=100,
             density=True,
-            alpha=0.4,
+            alpha=0.5,
             label="Male",
             linewidth=0.3,
             edgecolor="black",
+            color='black'
         )
         ax.hist(
-            D1[dIdx, :],
-            bins=80,
+            dataFemale[index, :],
+            bins=100,
             density=True,
-            alpha=0.4,
+            alpha=0.5,
             label="Female",
             linewidth=0.3,
             edgecolor="black",
@@ -102,7 +104,7 @@ def plot_centered_hist(dataset, label):
         ax.legend()
 
         plt.tight_layout()
-        plt.savefig("Dataset/Analysis/Histograms/hist_{}.pdf".format(dIdx))
+        plt.savefig("Dataset/Analysis/Histograms/histogram{}.pdf".format(index))
 
 
-plot_centered_hist(training_data, training_label)
+plot_histogram(training_data, training_label)
