@@ -1,4 +1,5 @@
 from Utils.load import *
+from Utils.utils import *
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -151,7 +152,40 @@ def plot_scatter_matrix(dataset, label):
             plt.clf()
     # Once every graph is complete, they were closed
     plt.close()
+    
+    
+def plot_LDA_hist(dataset, label, m):
+    #Calculates the first m discriminant components
+    W1 = LDA1(dataset, label, m)
+    #projection in the new dimensional space defined by the discriminative components
+    y1 = numpy.dot(W1.T, dataset)
+
+    dataMale = y1[:, label == 0]
+    dataFemale = y1[:, label == 1]
+
+    plt.figure()
+    plt.xlabel("LDA Direction")
+    plt.hist(
+        dataMale[0],
+        bins=100,
+        density=True,
+        alpha=0.8,
+        label="Male",
+        edgecolor="black",
+        color="black")
+    plt.hist(
+        dataFemale[0],
+        bins=100,
+        density=True,
+        alpha=0.8,
+        label="Female",
+        edgecolor="black",
+        color="red",
+    )
+    plt.legend()
+    plt.savefig("Dataset/Analysis/LDA/lda.pdf")
 
 # -------------- ANALYSIS EXE -------------- # 
 #plot_histogram(training_data, training_label)
-plot_scatter_matrix(training_data, training_label)
+#plot_scatter_matrix(training_data, training_label)
+plot_LDA_hist(training_data, training_label, 1)
