@@ -146,16 +146,12 @@ def plot_scatter_matrix(dataset, label):
             plt.savefig(
                 f"Dataset/Analysis/Scatter/Plot_scatter{index1}_{index2}.pdf"
             )
-
-            #with plt.style.context("ggplot"):
-                
-                
-
+            
             # This instruction delete the current graph. In this way I can free memory for the next one
             plt.clf()
     # Once every graph is complete, they were closed
     plt.close()
 
-
+# -------------- ANALYSIS EXE -------------- # 
 #plot_histogram(training_data, training_label)
 plot_scatter_matrix(training_data, training_label)
