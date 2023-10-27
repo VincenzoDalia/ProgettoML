@@ -41,12 +41,13 @@ print(
     f"There is a {num_female_test/tot_test * 100}% of female over the test set\n")
 
 print(
-    "        TRAIN     TESTmain\n" +
+    "        TRAIN     TEST\n" +
     f"MALE     {num_male_train}      {num_male_test}\n" +
     f"FEMALE   {num_female_train}     {num_female_test}\n ")
 
 
 # ------------------- FEATURE ANALYSIS ------------------- #
+
 def plot_histogram(dataset, label):
 
     #Center data
@@ -107,4 +108,54 @@ def plot_histogram(dataset, label):
         plt.savefig("Dataset/Analysis/Histograms/histogram{}.pdf".format(index))
 
 
-plot_histogram(training_data, training_label)
+def plot_scatter_matrix(dataset, label):
+    
+    # Separate Male and Female data
+    dataMale = dataset[:, label == 0]
+    dataFemale = dataset[:, label == 1]
+
+    features = {
+        0: "Feature 1",
+        1: "Feature 2",
+        2: "Feature 3",
+        3: "Feature 4",
+        4: "Feature 5",
+        5: "Feature 6",
+        6: "Feature 7",
+        7: "Feature 8",
+        8: "Feature 9",
+        9: "Feature 10",
+        10: "Feature 11",
+        11: "Feature 12",
+    }
+
+    # Create a new empty graph
+    plt.figure()
+
+    # ATTENZIONE : SCATTER GENERATI INVERTENDO LE FEATURES
+    for index1 in range(11, -1, -1):
+        for index2 in range(index1 - 1, -1, -1):
+            plt.xlabel(features[index1])
+            plt.ylabel(features[index2])
+            plt.scatter(dataMale[index1, :], dataMale[index2, :], label="Male", color="black",alpha=0.9)
+            plt.scatter(dataFemale[index1, :], dataFemale[index2, :], label="Female", color="orange",alpha=0.9)
+            plt.legend()
+            plt.tight_layout()
+            
+            # The path is a formatted python string, for this reason there is the f before the path.
+            plt.savefig(
+                f"Dataset/Analysis/Scatter/Plot_scatter{index1}_{index2}.pdf"
+            )
+
+            #with plt.style.context("ggplot"):
+                
+                
+
+            # This instruction delete the current graph. In this way I can free memory for the next one
+            plt.clf()
+    # Once every graph is complete, they were closed
+    plt.close()
+
+
+#plot_histogram(training_data, training_label)
+plot_scatter_matrix(training_data, training_label)
