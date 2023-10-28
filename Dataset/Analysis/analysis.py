@@ -1,7 +1,9 @@
 from Utils.load import *
 from Utils.utils import *
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
+from scipy.stats import pearsonr
 
 
 # Loading Dataset
@@ -188,7 +190,55 @@ def plot_LDA_hist(dataset, label, m):
     plt.savefig("Dataset/Analysis/LDA/lda.pdf")
 
 
+def plot_heatmap(dataset, label, cmap_name, ):
+
+    dataset = dataset[:, label]
+
+    heatmap = numpy.zeros((dataset.shape[0], dataset.shape[0]))
+
+    for i in range(dataset.shape[0]):
+        for j in range(i + 1):
+            coef = abs(pearsonr(dataset[i, :], dataset[j, :])[0])
+            heatmap[i][j] = coef
+            heatmap[j][i] = coef
+
+    fig, ax = plt.subplots()
+    im = ax.imshow(heatmap, cmap=cmap_name)
+
+    ax.set_xticks(numpy.arange(dataset.shape[0]))
+    ax.set_yticks(numpy.arange(dataset.shape[0]))
+    ax.set_xticklabels(numpy.arange(1, dataset.shape[0] + 1))
+    ax.set_yticklabels(numpy.arange(1, dataset.shape[0] + 1))
+
+    ax.set_title("Heatmap of Pearson Correlation")
+    fig.colorbar(im)
+
+    plt.savefig(filename)
+    plt.close(fig)
+
+
+def plot_features_histograms(DTR, LTR, _title):
+    matplotlib.rcParams.update(matplotlib.rcParamsDefault)
+    for i in range(12):
+        labels = ["male", "female"]
+        title = _title + str(i)
+        plt.figure()
+        plt.title(title)
+
+        y = DTR[:, LTR == 0][i]
+        plt.hist(y, bins=60, density=True, alpha=0.4, linewidth=1.0, color='red', edgecolor='black',
+                 label=labels[0])
+        y = DTR[:, LTR == 1][i]
+        plt.hist(y, bins=60, density=True, alpha=0.4, linewidth=1.0, color='blue', edgecolor='black',
+                 label=labels[1])
+        plt.legend()
+        plt.savefig('./images/hist_' + title + '.svg')
+        plt.show()
+
+
 #  -------------- ANALYSIS EXE -------------- #
 # plot_histogram(training_data, training_label)
 # plot_scatter_matrix(training_data, training_label)
-plot_LDA_hist(training_data, training_label, 1)
+# plot_LDA_hist(training_data, training_label, 1)
+
+plot_features(DTR, LTR, appendToTitle='GAUSSIANIZED_')
