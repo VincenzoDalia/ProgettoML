@@ -50,42 +50,35 @@ print(
 
 
 # ------------------- FEATURE ANALYSIS ------------------- #
+def plot_histogram(data, labels):
+    # Calcola la media per ciascuna feature
+    mean_values = np.mean(data, axis=1, keepdims=True)
 
-def plot_histogram(dataset, label):
+    # Normalizza i dati sottraendo le medie solo se la media è diversa da zero
+    if np.any(mean_values != 0):
+        normalized_data = data - mean_values
+    else:
+        normalized_data = data
 
-    # Center data
-    mean = np.mean(dataset, axis=1, keepdims=True)
+    # Estrai i dati per maschi e femmine in base alle etichette (0 per maschi, 1 per femmine)
+    male_data = normalized_data[:, labels == 0]
+    female_data = normalized_data[:, labels == 1]
 
-    if mean.any() != 0:
-        dataset = dataset - mean
+    num_features = data.shape[0]  # Ottieni il numero di feature
 
-    dataMale = dataset[:, label == 0]
-    dataFemale = dataset[:, label == 1]
+    plt.figure()
 
-    features = {
-        0: "Feature 1",
-        1: "Feature 2",
-        2: "Feature 3",
-        3: "Feature 4",
-        4: "Feature 5",
-        5: "Feature 6",
-        6: "Feature 7",
-        7: "Feature 8",
-        8: "Feature 9",
-        9: "Feature 10",
-        10: "Feature 11",
-        11: "Feature 12",
-    }
+    for feature_index in range(num_features):
+        # Crea una nuova figura e un asse per ciascuna feature
 
-    for index, f in features.items():
+        # Imposta le etichette dell'asse x e y
+        feature_name = "Feature " + str(feature_index + 1)
+        plt.set_xlabel(feature_name, fontsize=10, fontweight="bold")
+        plt.set_ylabel("Probability Density", fontsize=10, fontweight="bold")
 
-        ax = plt.subplots()[1]
-
-        ax.set_xlabel(f, fontsize=10, fontweight="bold")
-        ax.set_ylabel("Probability Density", fontsize=10, fontweight="bold")
-
-        ax.hist(
-            dataMale[index, :],
+        # Crea gli istogrammi per maschi e femmine
+        plt.hist(
+            male_data[feature_index, :],
             bins=100,
             density=True,
             alpha=0.5,
@@ -94,8 +87,8 @@ def plot_histogram(dataset, label):
             edgecolor="black",
             color='black'
         )
-        ax.hist(
-            dataFemale[index, :],
+        plt.hist(
+            female_data[feature_index, :],
             bins=100,
             density=True,
             alpha=0.5,
@@ -105,10 +98,71 @@ def plot_histogram(dataset, label):
             color="red",
         )
 
+        # Aggiungi la legenda
+        plt.legend()
+
+        # Regola il layout
+        plt.tight_layout()
+
+        # Salva il grafico in un file PDF con un nome basato sull'indice della feature
+        plt.savefig("Dataset/Analysis/Histograms/histogram{}.pdf".format(feature_index))
+
+
+def plot_histogram(data, labels):
+    # Calcola la media per ciascuna feature
+    mean_values = np.mean(data, axis=1, keepdims=True)
+
+    # Normalizza i dati sottraendo le medie solo se la media è diversa da zero
+    if np.any(mean_values != 0):
+        normalized_data = data - mean_values
+    else:
+        normalized_data = data
+
+    # Estrai i dati per maschi e femmine in base alle etichette (0 per maschi, 1 per femmine)
+    male_data = normalized_data[:, labels == 0]
+    female_data = normalized_data[:, labels == 1]
+
+    num_features = data.shape[0]  # Ottieni il numero di feature
+
+    for feature_index in range(num_features):
+        # Crea una nuova figura e un asse per ciascuna feature
+        fig, ax = plt.subplots()
+
+        # Imposta le etichette dell'asse x e y
+        feature_name = "Feature " + str(feature_index + 1)
+        ax.set_xlabel(feature_name, fontsize=10, fontweight="bold")
+        ax.set_ylabel("Probability Density", fontsize=10, fontweight="bold")
+
+        # Crea gli istogrammi per maschi e femmine
+        ax.hist(
+            male_data[feature_index, :],
+            bins=100,
+            density=True,
+            alpha=0.5,
+            label="Male",
+            linewidth=0.3,
+            edgecolor="black",
+            color='black'
+        )
+        ax.hist(
+            female_data[feature_index, :],
+            bins=100,
+            density=True,
+            alpha=0.5,
+            label="Female",
+            linewidth=0.3,
+            edgecolor="black",
+            color="red",
+        )
+
+        # Aggiungi la legenda
         ax.legend()
 
+        # Regola il layout
         plt.tight_layout()
-        plt.savefig("Dataset/Analysis/Histograms/histogram{}.pdf".format(index))
+
+        # Salva il grafico in un file PDF con un nome basato sull'indice della feature
+        plt.savefig("Dataset/Analysis/Histograms/histogram{}.pdf".format(feature_index))
 
 
 def plot_scatter_matrix(dataset, label):
@@ -237,8 +291,7 @@ def plot_features_histograms(DTR, LTR, _title):
 
 
 #  -------------- ANALYSIS EXE -------------- #
-# plot_histogram(training_data, training_label)
+plot_histogram(training_data, training_label)
 # plot_scatter_matrix(training_data, training_label)
 # plot_LDA_hist(training_data, training_label, 1)
 
-plot_features(DTR, LTR, appendToTitle='GAUSSIANIZED_')
