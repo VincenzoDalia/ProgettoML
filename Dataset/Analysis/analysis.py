@@ -107,53 +107,41 @@ def plot_histogram(data, labels):
         # Salva il grafico in un file PDF con un nome basato sull'indice della feature
         plt.savefig("Dataset/Analysis/Histograms/histogram{}.pdf".format(feature_index))
 
-
-
-def plot_scatter_matrix(dataset, label):
-
+def plot_scatter_matrix(data, labels):
     # Separate Male and Female data
-    dataMale = dataset[:, label == 0]
-    dataFemale = dataset[:, label == 1]
+    male_data = data[:, labels == 0]
+    female_data = data[:, labels == 1]
 
-    features = {
-        0: "Feature 1",
-        1: "Feature 2",
-        2: "Feature 3",
-        3: "Feature 4",
-        4: "Feature 5",
-        5: "Feature 6",
-        6: "Feature 7",
-        7: "Feature 8",
-        8: "Feature 9",
-        9: "Feature 10",
-        10: "Feature 11",
-        11: "Feature 12",
-    }
+    num_features = data.shape[0]  # Ottieni il numero di feature
 
-    # Create a new empty graph
+    # Crea un nuovo grafico vuoto
     plt.figure()
 
-    # ATTENZIONE : SCATTER GENERATI INVERTENDO LE FEATURES
-    for index1 in range(11, -1, -1):
-        for index2 in range(index1 - 1, -1, -1):
-            plt.xlabel(features[index1])
-            plt.ylabel(features[index2])
-            plt.scatter(dataMale[index1, :], dataMale[index2, :],
+    # Itera su tutte le combinazioni di coppie di feature
+    for feature_index1 in range(num_features):
+        for feature_index2 in range(feature_index1 - 1, -1, -1):
+            feature_name1 = f"Feature {feature_index1 + 1}"
+            feature_name2 = f"Feature {feature_index2 + 1}"
+
+            plt.xlabel(feature_name1)
+            plt.ylabel(feature_name2)
+
+            plt.scatter(male_data[feature_index1, :], male_data[feature_index2, :],
                         label="Male", color="black", alpha=0.9)
-            plt.scatter(dataFemale[index1, :], dataFemale[index2, :],
+            plt.scatter(female_data[feature_index1, :], female_data[feature_index2, :],
                         label="Female", color="orange", alpha=0.9)
             plt.legend()
             plt.tight_layout()
 
-            # The path is a formatted python string, for this reason there is the f before the path.
-            plt.savefig(
-                f"Dataset/Analysis/Scatter/Plot_scatter{index1}_{index2}.pdf"
-            )
+            # Salva il grafico in un file PDF con un nome basato sugli indici delle feature
+            plt.savefig(f"Dataset/Analysis/Scatter/Plot_scatter{feature_index1}_{feature_index2}.pdf")
 
-            # This instruction delete the current graph. In this way I can free memory for the next one
+            # Cancella il grafico corrente per liberare memoria per il prossimo
             plt.clf()
-    # Once every graph is complete, they were closed
+
+    # Chiudi tutti i grafici una volta che sono completi
     plt.close()
+
 
 
 def plot_LDA_hist(dataset, label, m):
@@ -235,7 +223,8 @@ def plot_features_histograms(DTR, LTR, _title):
 
 
 #  -------------- ANALYSIS EXE -------------- #
-plot_histogram(training_data, training_label)
-# plot_scatter_matrix(training_data, training_label)
+
+#plot_histogram(training_data, training_label)
+plot_scatter_matrix(training_data, training_label)
 # plot_LDA_hist(training_data, training_label, 1)
 
