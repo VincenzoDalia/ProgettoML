@@ -224,7 +224,7 @@ def plot_features_histograms(DTR, LTR, _title):
 
 #  -------------- ANALYSIS EXE -------------- #
 
-#plot_histogram(training_data, training_label)
-plot_scatter_matrix(training_data, training_label)
-# plot_LDA_hist(training_data, training_label, 1)
+# plot_histogram(training_data, training_label)
+# plot_scatter_matrix(training_data, training_label)
+plot_LDA_hist(training_data, training_label, 1)
 
