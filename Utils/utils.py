@@ -1,6 +1,8 @@
 import numpy
 import matplotlib as plt
-import scipy
+# import scipy
+import scipy.linalg  # aggiunto per LDA su windows
+
 
 def mcol(array):
     return array.reshape((array.size, 1))
@@ -10,7 +12,7 @@ def mrow(array):
     return array.reshape((1, array.size))
 
 
-# --------------- LDA utils functions --------------- #
+#  --------------- LDA utils functions --------------- #
 
 # Function to calculate the inter-class covariance
 def Sw_c(dataset):
@@ -23,7 +25,7 @@ def Sw_c(dataset):
     return Sw_c
 
 
-#Function to calcolate the within-class covariance matrix Sw and the between-class covariance matrix Sb
+# Function to calcolate the within-class covariance matrix Sw and the between-class covariance matrix Sb
 def SbSw(matrix, label):
     Sb = 0
     Sw = 0
@@ -41,11 +43,11 @@ def SbSw(matrix, label):
     return Sb, Sw
 
 # LDA Function to calculate the discriminant elements, obtained analyzing Sw and Sb
-#the parameter m indicates the number of discriminant elements we have to generate
+# the parameter m indicates the number of discriminant elements we have to generate
+
+
 def LDA1(matrix, label, m):
     Sb, Sw = SbSw(matrix, label)
     s, U = scipy.linalg.eigh(Sb, Sw)
     W = U[:, ::-1][:, 0:m]
     return W
-
-

@@ -51,7 +51,7 @@ print(
 
 def plot_histogram(dataset, label):
 
-    #Center data
+    # Center data
     mean = np.mean(dataset, axis=1, keepdims=True)
 
     if mean.any() != 0:
@@ -110,7 +110,7 @@ def plot_histogram(dataset, label):
 
 
 def plot_scatter_matrix(dataset, label):
-    
+
     # Separate Male and Female data
     dataMale = dataset[:, label == 0]
     dataFemale = dataset[:, label == 1]
@@ -138,26 +138,28 @@ def plot_scatter_matrix(dataset, label):
         for index2 in range(index1 - 1, -1, -1):
             plt.xlabel(features[index1])
             plt.ylabel(features[index2])
-            plt.scatter(dataMale[index1, :], dataMale[index2, :], label="Male", color="black",alpha=0.9)
-            plt.scatter(dataFemale[index1, :], dataFemale[index2, :], label="Female", color="orange",alpha=0.9)
+            plt.scatter(dataMale[index1, :], dataMale[index2, :],
+                        label="Male", color="black", alpha=0.9)
+            plt.scatter(dataFemale[index1, :], dataFemale[index2, :],
+                        label="Female", color="orange", alpha=0.9)
             plt.legend()
             plt.tight_layout()
-            
+
             # The path is a formatted python string, for this reason there is the f before the path.
             plt.savefig(
                 f"Dataset/Analysis/Scatter/Plot_scatter{index1}_{index2}.pdf"
             )
-            
+
             # This instruction delete the current graph. In this way I can free memory for the next one
             plt.clf()
     # Once every graph is complete, they were closed
     plt.close()
-    
-    
+
+
 def plot_LDA_hist(dataset, label, m):
-    #Calculates the first m discriminant components
+    # Calculates the first m discriminant components
     W1 = LDA1(dataset, label, m)
-    #projection in the new dimensional space defined by the discriminative components
+    # projection in the new dimensional space defined by the discriminative components
     y1 = numpy.dot(W1.T, dataset)
 
     dataMale = y1[:, label == 0]
@@ -185,7 +187,8 @@ def plot_LDA_hist(dataset, label, m):
     plt.legend()
     plt.savefig("Dataset/Analysis/LDA/lda.pdf")
 
-# -------------- ANALYSIS EXE -------------- # 
-#plot_histogram(training_data, training_label)
-#plot_scatter_matrix(training_data, training_label)
+
+#  -------------- ANALYSIS EXE -------------- #
+# plot_histogram(training_data, training_label)
+# plot_scatter_matrix(training_data, training_label)
 plot_LDA_hist(training_data, training_label, 1)
