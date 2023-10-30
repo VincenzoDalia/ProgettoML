@@ -3,6 +3,7 @@ from Utils.utils import *
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
+import scipy
 from scipy.stats import pearsonr
 
 
@@ -75,7 +76,6 @@ def plot_histogram(data, labels):
         title = "Probability Density - " + feature_name
         plt.title(title, fontsize=10, fontweight="bold")
 
-        
         # Crea gli istogrammi per maschi e femmine
         plt.hist(
             male_data[feature_index, :],
@@ -105,7 +105,9 @@ def plot_histogram(data, labels):
         plt.tight_layout()
 
         # Salva il grafico in un file PDF con un nome basato sull'indice della feature
-        plt.savefig("Dataset/Analysis/Histograms/histogram{}.pdf".format(feature_index))
+        plt.savefig(
+            "Dataset/Analysis/Histograms/histogram{}.pdf".format(feature_index))
+
 
 def plot_scatter_matrix(data, labels):
     # Separate Male and Female data
@@ -134,14 +136,14 @@ def plot_scatter_matrix(data, labels):
             plt.tight_layout()
 
             # Salva il grafico in un file PDF con un nome basato sugli indici delle feature
-            plt.savefig(f"Dataset/Analysis/Scatter/Plot_scatter{feature_index1}_{feature_index2}.pdf")
+            plt.savefig(
+                f"Dataset/Analysis/Scatter/Plot_scatter{feature_index1}_{feature_index2}.pdf")
 
             # Cancella il grafico corrente per liberare memoria per il prossimo
             plt.clf()
 
     # Chiudi tutti i grafici una volta che sono completi
     plt.close()
-
 
 
 def plot_LDA_hist(dataset, label, m):
@@ -176,33 +178,6 @@ def plot_LDA_hist(dataset, label, m):
     plt.savefig("Dataset/Analysis/LDA/lda.pdf")
 
 
-def plot_heatmap(dataset, label, cmap_name, ):
-
-    dataset = dataset[:, label]
-
-    heatmap = numpy.zeros((dataset.shape[0], dataset.shape[0]))
-
-    for i in range(dataset.shape[0]):
-        for j in range(i + 1):
-            coef = abs(pearsonr(dataset[i, :], dataset[j, :])[0])
-            heatmap[i][j] = coef
-            heatmap[j][i] = coef
-
-    fig, ax = plt.subplots()
-    im = ax.imshow(heatmap, cmap=cmap_name)
-
-    ax.set_xticks(numpy.arange(dataset.shape[0]))
-    ax.set_yticks(numpy.arange(dataset.shape[0]))
-    ax.set_xticklabels(numpy.arange(1, dataset.shape[0] + 1))
-    ax.set_yticklabels(numpy.arange(1, dataset.shape[0] + 1))
-
-    ax.set_title("Heatmap of Pearson Correlation")
-    fig.colorbar(im)
-
-    plt.savefig(filename)
-    plt.close(fig)
-
-
 def plot_features_histograms(DTR, LTR, _title):
     matplotlib.rcParams.update(matplotlib.rcParamsDefault)
     for i in range(12):
@@ -220,9 +195,6 @@ def plot_features_histograms(DTR, LTR, _title):
         plt.legend()
         plt.savefig('./images/hist_' + title + '.svg')
         plt.show()
-        
-        
-
 
 
 #  -------------- ANALYSIS EXE -------------- #
@@ -230,4 +202,4 @@ def plot_features_histograms(DTR, LTR, _title):
 # plot_histogram(training_data, training_label)
 # plot_scatter_matrix(training_data, training_label)
 # plot_LDA_hist(training_data, training_label, 1)
-
+# plot_heatmaps_dataset(training_data)
