@@ -13,24 +13,32 @@ training_data, training_label = load('./Dataset/Train.txt')
 test_data, test_label = load('./Dataset/Test.txt')
 
 
-def plot_heatmap(D, L, cmap_name, filename):
-    D = D[:, L]
-    features = D.shape[0]
-    heatmap = numpy.zeros((features, features))
+def plot_heatmap(data, label, color, filename):
 
-    for i in range(D.shape[0]):
+    print(f"data prima di essere tagliato: {data.shape}")
+
+    data = data[:, label]
+
+    print(f"data dopo essere tagliato: {data.shape}")
+
+    n_features = data.shape[0]
+    n_samples = data.shape[1]
+
+    heatmap = numpy.zeros((n_features, n_features))
+
+    for i in range(n_features):
         for j in range(i + 1):
-            coef = abs(pearsonr(D[i, :], D[j, :])[0])
+            coef = abs(pearsonr(data[i, :], data[j, :])[0])
             heatmap[i][j] = coef
             heatmap[j][i] = coef
 
     fig, ax = plt.subplots()
-    im = ax.imshow(heatmap, cmap=cmap_name)
+    im = ax.imshow(heatmap, cmap=color)
 
-    ax.set_xticks(numpy.arange(D.shape[0]))
-    ax.set_yticks(numpy.arange(D.shape[0]))
-    ax.set_xticklabels(numpy.arange(1, D.shape[0] + 1))
-    ax.set_yticklabels(numpy.arange(1, D.shape[0] + 1))
+    ax.set_xticks(numpy.arange(n_features))
+    ax.set_yticks(numpy.arange(n_features))
+    ax.set_xticklabels(numpy.arange(1, n_features + 1))
+    ax.set_yticklabels(numpy.arange(1, n_features + 1))
 
     ax.set_title("Heatmap of Pearson Correlation")
     fig.colorbar(im)
@@ -40,6 +48,14 @@ def plot_heatmap(D, L, cmap_name, filename):
 
 
 def plot_heatmaps_dataset(D):
-    cmap_name = "Greys"
-    filename = "./Heatmap/correlation_all.png"
-    plot_heatmap(D, range(D.shape[1]), cmap_name, filename)
+    color = "inferno"
+    filename = "Dataset/Analysis/Heatmaps/correlation_all.png"
+    plot_heatmap(D, range(D.shape[1]), color, filename)
+
+
+plot_heatmap(training_data, range(
+    training_data.shape[1]), "inferno", "Dataset/Analysis/Heatmaps/correlation_train.png")
+# plot_heatmaps_dataset(training_data)
+
+plot_heatmap(training_data, range(
+    training_data.shape[1]), "inferno", "Dataset/Analysis/Heatmaps/correlation_train.png")
