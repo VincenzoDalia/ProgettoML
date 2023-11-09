@@ -246,7 +246,9 @@ def explained_variance(data):
     explained_variance = s / np.sum(s)
 
     plt.figure()
-    plt.yticks(numpy.linspace(plt.ylim()[0], plt.ylim()[1], 25))
+    plt.yticks(numpy.linspace(plt.ylim()[0], plt.ylim()[1], 35)) 
+    plt.xticks(numpy.linspace(0,12, num=13 ))
+    plt.xlim(0,11)
     plt.plot(np.cumsum(explained_variance))
     plt.grid(True)
     plt.xlabel("Components")
