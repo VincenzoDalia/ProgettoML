@@ -224,6 +224,34 @@ def plot_heatmap(data, label, title, color, filename):
     
     plt.savefig(filename)
     plt.close()
+    
+    
+def explained_variance(data):
+    
+    mu = np.mean(data, axis=1, keepdims=True)
+    data_centered = data - mu
+    
+    #calcolo la covarianza tramite una funzione di numpy
+    cov = np.cov(data_centered)
+    
+    #eigvalsh calcola solo gli autovalori ed è ottimizzato per matrici simmetriche
+    s = np.linalg.eigvalsh(cov)[::-1]
+
+
+    #Calcola quanto una componente pesa in percentuale sulla varianza. Queste percentuali
+    #vengono poi plottate nei passaggi successivi. osservando i grafici si può
+    #decidere ti tenere solo alcune componenti, per ridurre la dimensionalità, a patto
+    #che queste abbiano una varianza alta. In questo modo riduciamo le componenti
+    #ma siamo sicuri di riuscire a rappresentare correttamente il problema iniziale
+    explained_variance = s / np.sum(s)
+
+    plt.figure()
+    plt.yticks(numpy.linspace(plt.ylim()[0], plt.ylim()[1], 25))
+    plt.plot(np.cumsum(explained_variance))
+    plt.grid(True)
+    plt.xlabel("Components")
+    plt.ylabel("Fraction of explained variance")
+    plt.savefig("Dataset/Analysis/ExplainedVariance/explained_variance.pdf")
 
 
 #  -------------- ANALYSIS EXE -------------- #
@@ -234,11 +262,13 @@ def plot_heatmap(data, label, title, color, filename):
 # plot_heatmaps_dataset(training_data)
 
 #Plot heatmap for all the data
-plot_heatmap(training_data, range(
-    training_data.shape[1]), "", "YlGn", "Dataset/Analysis/Heatmaps/correlation_train.png")
+#plot_heatmap(training_data, range(training_data.shape[1]), "", "YlGn", "Dataset/Analysis/Heatmaps/correlation_train.png")
 
 #Plot the heatmap only for male
-plot_heatmap(training_data, training_label==0, " - Male", "PuBu", "Dataset/Analysis/Heatmaps/male_correlation_train.png")
+#plot_heatmap(training_data, training_label==0, " - Male", "PuBu", "Dataset/Analysis/Heatmaps/male_correlation_train.png")
 
 #Plot the heatmap only for female
-plot_heatmap(training_data, training_label==1, " - Female", "YlOrRd", "Dataset/Analysis/Heatmaps/female_correlation_train.png")
+#plot_heatmap(training_data, training_label==1, " - Female", "YlOrRd", "Dataset/Analysis/Heatmaps/female_correlation_train.png")
+
+
+explained_variance(training_data)
