@@ -68,14 +68,20 @@ def LDA1(matrix, label, m):
 # ------------------ PCA ------------------ #
 
 #Da testare ancora
+# Usato per i GMM, Gaussian e Logistic Regression, non per feature analysis
 def PCA(data_matrix, m, DTE=None):
     N = data_matrix.shape[1]
-    mu = np.mean(data_matrix, axis=1, keepdims=True)
+    mu = numpy.mean(data_matrix, axis=1, keepdims=True)
     DC = data_matrix - mu
-    C = np.dot(DC, DC.T) / N
-    s, U = np.linalg.eigh(C)
+    C = numpy.dot(DC, DC.T) / N
+    s, U = numpy.linalg.eigh(C)
+    # La prossima istruzione serve a selezionare i primi m autovettori più grandi calcolati in precedenza
+    # e li assegna a P
     P = U[:, ::-1][:, 0:m]
-    DP = np.dot(P.T, data_matrix)
+    # Proiezione dei dati originali sulla nuova base identificata dagli autovettori selezionati in P
+    DP = numpy.dot(P.T, data_matrix)
+    # Se DTE (Dati di test) è una matrice fornita allora viene anch'essa
+    # proiettata sulla nuova base 
     if DTE is not None:
-        DTE = np.dot(P.T, DTE)
+        DTE = numpy.dot(P.T, DTE)
     return DP, DTE
