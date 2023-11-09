@@ -270,5 +270,5 @@ def explained_variance(data):
 #Plot the heatmap only for female
 #plot_heatmap(training_data, training_label==1, " - Female", "YlOrRd", "Dataset/Analysis/Heatmaps/female_correlation_train.png")
 
-
+# Plot explained variance graph
 explained_variance(training_data)
