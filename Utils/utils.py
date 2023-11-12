@@ -85,3 +85,49 @@ def PCA(data_matrix, m, DTE=None):
     if DTE is not None:
         DTE = numpy.dot(P.T, DTE)
     return DP, DTE
+
+
+# ------------------ k-Fold ------------------ #
+
+def kfold(function, k, D, L, compute_scores, eff_prior=None, seed=4):
+    SPost_partial = []
+    folds = []
+
+    numpy.random.seed(seed)
+    idx = numpy.random.permutation(D.shape[1])
+
+    Label = L[idx]
+
+    fold_size = D.shape[1] // k
+
+    # Divide indices into k-folds
+    for i in range(k):
+        start = i * fold_size
+        end = (i + 1) * fold_size
+        folds.append(idx[start:end])
+
+    # If the number of samples is not divisible by K, add the remaining samples to the last fold
+    if D.shape[1] % k != 0:
+        folds[-1] = numpy.concatenate((folds[-1], idx[k * fold_size :]))
+
+    # Perform Cross validation
+    for i in range(k):
+        # Choose the i-th fold as the validation fold
+        validation_indices = folds[i]
+        train_indices = numpy.concatenate([folds[j] for j in range(k) if j != i])
+        logSPost = function(
+            D[:, train_indices],
+            L[train_indices],
+            D[:, validation_indices],
+            L[validation_indices],
+            eff_prior,
+        )
+        scores = compute_scores(eff_prior, logSPost)
+        #scores = model.scores FORSE DA TOGLIERE
+
+        SPost_partial.append(scores)
+        # print("end fold:",i)
+
+    S = numpy.hstack(SPost_partial)
+
+    return S, Label

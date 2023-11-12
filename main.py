@@ -1,6 +1,7 @@
 from Utils.load import *
 from Dataset.Analysis.analysis import *
 import numpy as np
+from Models.trainMVG import *
 
 
 if __name__ == '__main__':
@@ -43,4 +44,5 @@ if __name__ == '__main__':
         f"MALE     {num_male_train}      {num_male_test}\n" +
         f"FEMALE   {num_female_train}     {num_female_test}\n ")
     
+
 
