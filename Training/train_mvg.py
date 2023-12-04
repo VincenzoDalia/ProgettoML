@@ -7,7 +7,7 @@ from Metrics.DCF import *
 from Metrics.ROC import *
 
 
-def train_classifier(classifier_list, name, D, L, prior):
+def train_classifier(classifier_list, name, D, L):
     m_list = [11, 10, 9, 8, 7]
     
     print("#####################################\n")
