@@ -1,7 +1,6 @@
 from Utils.load import *
 from Dataset.Analysis.analysis import *
 import numpy as np
-from Models.trainMVG import *
 
 
 if __name__ == '__main__':
