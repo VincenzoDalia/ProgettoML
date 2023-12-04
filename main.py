@@ -21,10 +21,10 @@ if __name__ == '__main__':
 
     # Number of Males and Females of training and test sets
 
-    num_male_train = numpy.count_nonzero(training_label == 0)
-    num_female_train = numpy.count_nonzero(training_label == 1)
-    num_male_test = numpy.count_nonzero(test_label == 0)
-    num_female_test = numpy.count_nonzero(test_label == 1)
+    num_male_train = np.count_nonzero(training_label == 0)
+    num_female_train = np.count_nonzero(training_label == 1)
+    num_male_test = np.count_nonzero(test_label == 0)
+    num_female_test = np.count_nonzero(test_label == 1)
 
     tot_male = num_male_train + num_male_test
     tot_female = num_female_train + num_female_test
