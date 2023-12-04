@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def kfold(Data, Labels, model, k, seed=3):
+def kfold(Data, Labels, model, k, prior, seed=3):
     
     N = Data.shape[1]
     fold_size = N//k #calcolo quanti samples ci sono in ogni fold al massimo.
@@ -26,7 +26,7 @@ def kfold(Data, Labels, model, k, seed=3):
         X_test = Data[:, test_indices]
         y_test = Labels[test_indices]
         
-        model.train(X_train, y_train, X_test, y_test, None) # Prior is None
+        model.train(X_train, y_train, X_test, y_test, prior) 
         
         model.calculate_scores()
         partial_scores = model.scores

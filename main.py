@@ -1,6 +1,8 @@
-from Utils.load import *
+from Functions.load import *
 from Dataset.Analysis.analysis import *
 import numpy as np
+from Models.MVG import *
+from Training.train_mvg import *
 
 
 if __name__ == '__main__':
@@ -44,4 +46,14 @@ if __name__ == '__main__':
         f"FEMALE   {num_female_train}     {num_female_test}\n ")
     
 
+
+    # Train Gaussian Classifiers #
+    
+    print("Training Gaussian Classifiers...\n")
+    train_LogGaussian_Classifier(training_data, training_label)
+    train_NBGaussian_Classifier(training_data, training_label)
+    train_TiedGaussian_Classifier(training_data, training_label)
+    train_TiedNBGaussian_Classifier(training_data, training_label)
+    print("Training Gaussian Classifiers... Done\n")
+        
 
