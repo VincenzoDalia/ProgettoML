@@ -3,6 +3,8 @@ from Functions.reshape_functions import *
 from Functions.kfold import *
 from Models.MVG import *
 from Preprocessing.PCA import *
+from Metrics.DCF import *
+from Metrics.ROC import *
 
 
 def train_MVG(D,L):
