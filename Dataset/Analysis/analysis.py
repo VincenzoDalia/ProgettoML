@@ -1,9 +1,8 @@
-from Utils.load import *
-from Utils.utils import *
+from Functions.load import *
+from Functions.reshape_functions import *
 import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
-import scipy
 from scipy.stats import pearsonr
 
 

@@ -1,11 +1,9 @@
 import numpy as np
-import sklearn.datasets
 import scipy
 
 
 
 ######           MVG model          ######
-
 
 
 def vrow(array):

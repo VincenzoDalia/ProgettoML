@@ -11,6 +11,17 @@ def mrow(array):
     return array.reshape((1, array.size))
 
 
+
+
+
+
+
+
+
+
+
+
+
 #  --------------- LDA utils functions --------------- #
 
 def compute_Sb(dataset, label):
