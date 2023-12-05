@@ -3,6 +3,7 @@ from Dataset.Analysis.analysis import *
 import numpy as np
 from Models.MVG import *
 from Training.train_mvg import *
+from Training.train_logistic_regression import *
 
 
 if __name__ == '__main__':
@@ -49,11 +50,19 @@ if __name__ == '__main__':
 
     # Train Gaussian Classifiers #
     
-    print("Training Gaussian Classifiers...\n")
-    train_LogGaussian_Classifier(training_data, training_label)
-    train_NBGaussian_Classifier(training_data, training_label)
-    train_TiedGaussian_Classifier(training_data, training_label)
-    train_TiedNBGaussian_Classifier(training_data, training_label)
-    print("Training Gaussian Classifiers... Done\n")
+    #print("Training Gaussian Classifiers...\n")
+    #train_LogGaussian_Classifier(training_data, training_label)
+    #train_NBGaussian_Classifier(training_data, training_label)
+    #train_TiedGaussian_Classifier(training_data, training_label)
+    #train_TiedNBGaussian_Classifier(training_data, training_label)
+    #print("Training Gaussian Classifiers... Done\n")
         
-
+        
+    # Train Logistic Regression #
+    
+    print("Training Gaussian Classifiers...\n")
+    
+    #LR_RAW(training_data,training_label,0.5)
+    LR_diff_priors(training_data,training_label)
+    
+    print("Training Gaussian Classifiers... Done\n")

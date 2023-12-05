@@ -69,7 +69,7 @@ def plot_histogram(data, labels):
     for feature_index in range(num_features):
         # Crea una nuova figura e un asse per ciascuna feature
         plt.figure()
-
+        
         # Imposta le etichetta
         feature_name = "Feature " + str(feature_index + 1)
         title = "Probability Density - " + feature_name
