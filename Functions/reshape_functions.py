@@ -15,13 +15,6 @@ def mrow(array):
 
 
 
-
-
-
-
-
-
-
 #  --------------- LDA utils functions --------------- #
 
 def compute_Sb(dataset, label):
@@ -100,7 +93,7 @@ def PCA(data_matrix, m, DTE=None):
 
 # ------------------ k-Fold ------------------ #
 
-def kfold(function, k, D, L, compute_scores, eff_prior=None, seed=4):
+def kfold_temp(function, k, D, L, compute_scores, eff_prior=None, seed=4):
     SPost_partial = []
     folds = []
 

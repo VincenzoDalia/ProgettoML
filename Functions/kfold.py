@@ -2,7 +2,7 @@ import numpy as np
 
 
 ###   KFOLD GINO
-
+""" 
 def kfold(Data, Labels, model, k, prior, seed=3):
     
     N = Data.shape[1]
@@ -41,8 +41,8 @@ def kfold(Data, Labels, model, k, prior, seed=3):
     
     return SPost,Labels
          
-    
-###   KFOLD MARIO
+     """
+""" ###   KFOLD MARIO
 def kfold(Data, Labels, model, k, prior, seed=4):
     
     N = Data.shape[1]
@@ -80,11 +80,8 @@ def kfold(Data, Labels, model, k, prior, seed=4):
     
     
     return SPost,Labels
+ """
 
-
-
-
-###   KFOLD DUMMERDA
 def kfold(D, L, model, k, eff_prior=None, seed=3):
     SPost_partial = []
     folds = []
@@ -127,4 +124,3 @@ def kfold(D, L, model, k, eff_prior=None, seed=3):
     S = np.hstack(SPost_partial)
 
     return S, Label
- """
