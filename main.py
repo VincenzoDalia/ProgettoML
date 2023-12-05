@@ -62,7 +62,7 @@ if __name__ == '__main__':
     
     print("Training Gaussian Classifiers...\n")
     
-    #LR_RAW(training_data,training_label,0.5)
-    LR_diff_priors(training_data,training_label)
+    run_Logistic_Regression_Graph(training_data,training_label,0.5)
+    # LR_diff_priors(training_data,training_label)
     
     print("Training Gaussian Classifiers... Done\n")
