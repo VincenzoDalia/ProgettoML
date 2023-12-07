@@ -112,3 +112,25 @@ def LR_diff_priors(D, L):
     # Stampa dei risultati
     for result in results:
         print(result)
+
+
+
+def Quad_LR_diff_priors(D, L):
+    l = 100
+    priors = [
+        (0.5, 0.5),
+        (0.5, 0.1),
+        (0.5, 0.9),
+        (0.1, 0.5),
+        (0.1, 0.1),
+        (0.1, 0.9),
+        (0.9, 0.5),
+        (0.9, 0.1),
+        (0.9, 0.9),
+    ]
+
+    for pi_T, pi in priors:
+        regression = QuadraticLogisticRegression(l)
+        SPost, Label = kfold(D, L, regression, 5, pi_T)
+        res = MIN_DCF(pi, 1, 1, Label, SPost)
+        print(f"min_DCF (pi_T = {pi_T}, pi = {pi}) : {round(res, 3)}")
