@@ -2,21 +2,19 @@ import numpy as np
 import sklearn.datasets
 import scipy.optimize
 
-def polynomial_transformation_prova(DTR, DTE):
-    n_train = DTR.shape[1]
-    n_eval = DTE.shape[1]
-    n_f = DTR.shape[0]
+def mcol(array):
+    return array.reshape((array.size, 1))
 
-    quad_dtr = np.empty((n_f ** 2 + n_f, n_train))
-    quad_dte = np.empty((n_f ** 2 + n_f, n_eval))
 
-    quad_dtr[:n_f ** 2, :] = (DTR[:, None] * DTR.reshape(1, n_f, n_train)).reshape(n_f**2, -1)
-    quad_dtr[n_f ** 2:, :] = DTR
+def polynomial_transformation_testmio(DTR, DTE):
+    
+    new_DTR = np.array([np.dot(mcol(x), mcol(x).T).reshape(x.size**2) for x in DTR.T])
+    new_DTR = np.vstack([new_DTR, DTR])
 
-    quad_dte[:n_f ** 2, :] = (DTE[:, None] * DTE.reshape(1, n_f, n_eval)).reshape(n_f**2, -1)
-    quad_dte[n_f ** 2:, :] = DTE
+    new_DTE = np.array([np.dot(mcol(x), mcol(x).T).reshape(x.size**2) for x in DTE.T])
+    new_DTE = np.vstack([new_DTE, DTE])
 
-    return quad_dtr, quad_dte
+    return new_DTR.T, new_DTE.T
 
 
 
@@ -111,7 +109,7 @@ class QuadraticLogisticRegression:
         return first_elem + loss_funct[0] + loss_funct[1]
 
     def train(self, DTR, LTR, DTE, LTE, eff_prior):
-        quad_DTR, quad_DTE = polynomial_transformation_prova(DTR, DTE)
+        quad_DTR, quad_DTE = polynomial_transformation(DTR, DTE)
         self.DTR = quad_DTR
         self.LTR = LTR
         self.DTE = quad_DTE
