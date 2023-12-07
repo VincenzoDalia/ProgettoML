@@ -66,6 +66,6 @@ if __name__ == '__main__':
     #LR_diff_priors(training_data,training_label)
     #Quad_LR_diff_priors(training_data,training_label)
     ZNorm_Logistic_Regression_Graph(training_data, training_label, 0.5)
-    PCA_Logistic_Regression_Graph(training_data, training_label, 0.5)
+    #PCA_Logistic_Regression_Graph(training_data, training_label, 0.5)
     
     print("Training Logistic Regression... Done\n")
