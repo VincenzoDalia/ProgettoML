@@ -4,6 +4,7 @@ import numpy as np
 from Models.MVG import *
 from Training.train_mvg import *
 from Training.train_logistic_regression import *
+from Training.train_svm import *
 
 
 if __name__ == '__main__':
@@ -60,12 +61,16 @@ if __name__ == '__main__':
         
     # Train Logistic Regression #
     
-    print("Training Logistic Regression...\n")
+    #print("Training Logistic Regression...\n")
     
     #simple_Logistic_Regression_Graph(training_data,training_label,0.5)
     #LR_diff_priors(training_data,training_label)
     #Quad_LR_diff_priors(training_data,training_label)
-    ZNorm_Logistic_Regression_Graph(training_data, training_label, 0.5)
+    #ZNorm_Logistic_Regression_Graph(training_data, training_label, 0.5)
     #PCA_Logistic_Regression_Graph(training_data, training_label, 0.5)
     
-    print("Training Logistic Regression... Done\n")
+    #print("Training Logistic Regression... Done\n")
+
+    # Train SVM #
+
+    SVM_diff_priors(training_data, training_label)
