@@ -60,10 +60,10 @@ if __name__ == '__main__':
         
     # Train Logistic Regression #
     
-    print("Training Gaussian Classifiers...\n")
+    print("Training Logistic Regression...\n")
     
     #run_Logistic_Regression_Graph(training_data,training_label,0.5)
     #LR_diff_priors(training_data,training_label)
     Quad_LR_diff_priors(training_data,training_label)
     
-    print("Training Gaussian Classifiers... Done\n")
+    print("Training Logistic Regression... Done\n")

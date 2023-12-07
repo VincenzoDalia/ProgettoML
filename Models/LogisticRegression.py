@@ -2,21 +2,6 @@ import numpy as np
 import sklearn.datasets
 import scipy.optimize
 
-def mcol(array):
-    return array.reshape((array.size, 1))
-
-
-def polynomial_transformation_testmio(DTR, DTE):
-    
-    new_DTR = np.array([np.dot(mcol(x), mcol(x).T).reshape(x.size**2) for x in DTR.T])
-    new_DTR = np.vstack([new_DTR, DTR])
-
-    new_DTE = np.array([np.dot(mcol(x), mcol(x).T).reshape(x.size**2) for x in DTE.T])
-    new_DTE = np.vstack([new_DTE, DTE])
-
-    return new_DTR.T, new_DTE.T
-
-
 
 def polynomial_transformation(DTR, DTE):
     n_train = DTR.shape[1]
