@@ -69,6 +69,15 @@ def tied_cov(gmm, vec, n):
 
     return updated_gmm
 
+def diagonal_cov(gmm, vec, n):
+    return [(g[0], g[1], np.diag(np.diag(g[2]))) for g in gmm]
+
+
+def TiedDiagonal_cov(gmm, vec, n):
+    tied_diagonal_gmm = diagonal_cov(tied_cov(gmm, vec, n), vec, n)
+    return tied_diagonal_gmm
+
+
 def EM(X, gmm, psi, type):
     
     llr_1 = None
@@ -100,11 +109,9 @@ def EM(X, gmm, psi, type):
         if type == "Tied":
             gmm_new = tied_cov(gmm_new, Z_vec, X_shape_1)
         elif type == "Diagonal":
-            pass
-            #gmm_new = diagonal_cov(gmm_new, Z_vec, X_shape_1)
+            gmm_new = diagonal_cov(gmm_new, Z_vec, X_shape_1)
         elif type == "Tied-Diagonal":
-            pass
-            #gmm_new = TiedDiagonal_cov(gmm_new, Z_vec, X_shape_1)
+            gmm_new = TiedDiagonal_cov(gmm_new, Z_vec, X_shape_1)
 
         gmm = constr_eigenv(psi, gmm_new)
 

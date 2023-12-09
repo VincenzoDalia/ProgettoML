@@ -82,4 +82,5 @@ if __name__ == '__main__':
     
     # Train GMM #
     
-    GMM_diff_priors(training_data, training_label)
+    #GMM_diff_priors(training_data, training_label)
+    #GMM_diff_priors_znorm(training_data, training_label)
