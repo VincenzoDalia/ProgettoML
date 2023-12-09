@@ -3,7 +3,8 @@ from Dataset.Analysis.analysis import *
 import numpy as np
 from Models.MVG import *
 from Training.train_mvg import *
-from Training.train_logistic_regression import *
+#from Training.train_logistic_regression import *
+from Training.train_logistic_regression_TEST import *
 from Training.train_svm import *
 from Training.train_gmm import *
 
@@ -64,10 +65,10 @@ if __name__ == '__main__':
     
     #print("Training Logistic Regression...\n")
     
-    #simple_Logistic_Regression_Graph(training_data,training_label,0.5)
+    simple_Logistic_Regression_Graph(training_data,training_label,0.5)
     #LR_diff_priors(training_data,training_label)
     #Quad_LR_diff_priors(training_data,training_label)
-    #ZNorm_Logistic_Regression_Graph(training_data, training_label, 0.5)
+    ZNorm_Logistic_Regression_Graph(training_data, training_label, 0.5)
     #PCA_Logistic_Regression_Graph(training_data, training_label, 0.5)
     
     #print("Training Logistic Regression... Done\n")
