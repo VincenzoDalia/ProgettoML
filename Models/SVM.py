@@ -74,44 +74,15 @@ class Linear_SVM:
         self.prior = prior
         
         D = np.vstack([self.DTR, self.K * np.ones((1, self.DTR.shape[1]))])
-        
         G = np.dot(D.T, D)
-        
-        #Z = self.LTR
-        
-        #Z[Z==0] = -1
-        
-        #Z = mCol(Z)
-        
-        #H = Z * Z.T * G
-        
         Z = 2 * self.LTR - 1
         H = (Z[:, None] * Z) * G  
-
-        # Compute Dual solution
+        
         alpha = np.zeros(self.LTR.size)
         
-        
-        #bounds_list = [(0,self.C)] * self.LTR.size  # va bene solo nel lab
-        
         bounds = weighted_bounds(self.C, self.LTR, [self.prior, 1-self.prior])
-        
-        
-        
-        (x, f, d) = opt.fmin_l_bfgs_b(lagrangian, x0=alpha, args=(H,), approx_grad=False, bounds=bounds, factr=1.0)
-        
-        
-        """ # Recover Primal solution
-        w_hat_star = np.sum( mCol(x) * mCol(Z) * D.T,  axis=0 )
-        
-        # Extract terms and compute scores
-        w_star = w_hat_star[0:-1] 
-        b_star = w_hat_star[-1] * self.K
 
-        scores = np.dot(w_star.T, DTE) + b_star
-        
-        primal_obj,duality_gap = compute_duality_gap(w_hat_star, self.C, Z, D,f)
-        dual_obj = f """
+        (x, f, d) = opt.fmin_l_bfgs_b(lagrangian, x0=alpha, args=(H,), approx_grad=False, bounds=bounds, factr=1.0)
         
         self.w = np.sum( mCol(x) * mCol(Z) * D.T,  axis=0 )
         self.DTE = np.vstack([self.DTE, np.ones(self.DTE.shape[1]) * self.K])
@@ -122,16 +93,7 @@ class Linear_SVM:
         self.scores = self.scores.reshape(-1)
         
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
 class Radial_SVM:
     def __init__(self, K, C, gamma):
