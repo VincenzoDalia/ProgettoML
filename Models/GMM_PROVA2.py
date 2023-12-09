@@ -51,70 +51,94 @@ def logpdf_gmm(X, gmm):
     log_probs = np.vstack(log_probs)
     return np.logaddexp.reduce(log_probs, axis=0)
 
-    
 def constr_eigenv(psi, gmm):
-    for i, (mean, weight, covNew) in enumerate(gmm):
-        U, s, Vt = np.linalg.svd(covNew, full_matrices=False)
+    for i in range(len(gmm)):
+        covNew = gmm[i][2]
+        U, s, _ = np.linalg.svd(covNew)
         s[s < psi] = psi
-        gmm[i] = (mean, weight, U @ np.diag(s) @ Vt)
+        gmm[i] = (gmm[i][0], gmm[i][1], np.dot(U, vcol(s) * U.T))
 
     return gmm
 
-def tied_cov(gmm, vec, n):
-    sigmas = np.array([component[2] for component in gmm])
-    weights = np.array(vec) / n
-    new_sigma = np.average(sigmas, weights=weights, axis=0)
 
-    updated_gmm = [(w, mu, new_sigma) for w, mu, _ in gmm]
+def tied_cov(gmm, vec, n):
+    num_components = len(gmm)
+    new_sigma = np.zeros_like(gmm[0][2])
+
+    for idx in range(num_components):
+        new_sigma += gmm[idx][2] * vec[idx]
+
+    new_sigma /= n
+
+    updated_gmm = [(component[0], component[1], new_sigma) for component in gmm]
 
     return updated_gmm
 
-def EM(X, gmm, psi, type):
-    
-    llr_1 = None
-    num_components = len(gmm)
-    X_shape_1 = X.shape[1]
-    logS = np.zeros((num_components, X_shape_1))
-    Z_vec = np.zeros(num_components)
 
+def EM(X, gmm, psi, type):
+    llr_1 = None
     while True:
+        num_components = len(gmm)
+
+        logS = np.zeros((num_components, X.shape[1]))
+
         # E-STEP
         for idx in range(num_components):
-            logS[idx, :] = logpdf_GAU_ND(X, gmm[idx][1], gmm[idx][2]) + np.log(gmm[idx][0])
-        logSMarginal = np.log(np.sum(np.exp(logS - np.max(logS, axis=0, keepdims=True)), axis=0)) + np.max(logS, axis=0, keepdims=True) 
+            logS[idx, :] = logpdf_GAU_ND(X, gmm[idx][1], gmm[idx][2]) + np.log(
+                gmm[idx][0]
+            )
+        logSMarginal = scipy.special.logsumexp(
+            logS, axis=0
+        )  # compute marginal densities
         SPost = np.exp(logS - logSMarginal)
 
         # M-STEP
+
+        Z_vec = np.zeros(num_components)
+
         gmm_new = []
         for idx in range(num_components):
             gamma = SPost[idx, :]
+
+            # update model parameters
             Z = gamma.sum()
             F = (vrow(gamma) * X).sum(1)
             S = np.dot(X, (vrow(gamma) * X).T)
+
             Z_vec[idx] = Z
+
+            # new parameters
             mu = vcol(F / Z)
             sigma = S / Z - np.dot(mu, mu.T)
-            w = Z / X_shape_1
-            gmm_new.append((w, mu, sigma))
+            w = Z / X.shape[1]
 
-        if type == "Tied":
-            gmm_new = tied_cov(gmm_new, Z_vec, X_shape_1)
+            gmm_new.append((w, mu, sigma))
+        # END M-STEP
+
+        if type == "GMM":
+            gmm_new = gmm_new
+        elif type == "Tied":
+            gmm_new = tied_cov(gmm_new, Z_vec, X.shape[1])
         elif type == "Diagonal":
             pass
-            #gmm_new = diagonal_cov(gmm_new, Z_vec, X_shape_1)
+           #gmm_new = diagonal_cov(gmm_new, Z_vec, X.shape[1])
         elif type == "Tied-Diagonal":
             pass
-            #gmm_new = TiedDiagonal_cov(gmm_new, Z_vec, X_shape_1)
+           #gmm_new = TiedDiagonal_cov(gmm_new, Z_vec, X.shape[1])
 
-        gmm = constr_eigenv(psi, gmm_new)
+        gmm_constr = constr_eigenv(psi, gmm_new)
+        gmm = gmm_constr
 
+        # stop criterion
         llr_0 = llr_1
         llr_1 = np.mean(logSMarginal)
-        if llr_0 is not None and np.abs(llr_1 - llr_0) < 1e-6:
+        if llr_0 is not None and llr_1 - llr_0 < 1e-6:
             break
 
     return gmm
- 
+
+
+  
 def LBG(iterations, X, gmm, alpha, psi, type):
         
     def update_gmm(gmm_start, alpha):
@@ -152,6 +176,7 @@ def LBG(iterations, X, gmm, alpha, psi, type):
     return gmm_start
 
 
+
 def gmm_scores(D, L, gmm):
     unique_labels = np.unique(L)
     num_classes = unique_labels.size
@@ -165,6 +190,8 @@ def gmm_scores(D, L, gmm):
     llr = np.log(scores[1] / scores[0])
 
     return llr
+
+
 
 
 
