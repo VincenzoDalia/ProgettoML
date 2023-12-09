@@ -73,4 +73,6 @@ if __name__ == '__main__':
 
     # Train SVM #
 
-    SVM_diff_priors(training_data, training_label)
+    #SVM_diff_priors(training_data, training_label)
+    RadKernBased_diff_priors(training_data, training_label)
+    #Poly_SVM_diff_priors(training_data, training_label)

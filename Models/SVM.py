@@ -2,46 +2,20 @@ import numpy as np
 import scipy.optimize as opt
 
 ### Functions for SVM ###
-
 def mCol(v):
     return v.reshape((v.size, 1))
-
 
 def mRow(array):
     return array.reshape((1,array.size))
 
-
-def acc_err_evaluate(Predicted_labels,Real_labels):
-    
-    result = np.array(Real_labels == Predicted_labels) # create an array of boolean with correct and uncorrect predictions
-
-    acc = 100*(result.sum())/len(Real_labels) # summing an array of boolean returns the number of true values
-    err = 100-acc
-    
-    return acc,err
-
-
-def compute_duality_gap(w_hat_star, C, Z, D_hat, dual_obj):
-  
-    first_term = 0.5 * np.linalg.norm(w_hat_star) ** 2
-    
-    second_term = C * np.sum(np.maximum(0, 1 - ( Z.T * np.dot(w_hat_star.T, D_hat) )))
-    
-    primal_objective = first_term + second_term
-    
-    duality_gap = primal_objective + dual_obj
-    
-    return primal_objective,np.abs(duality_gap)
-
 def weighted_bounds(C, LTR, priors):
-    bounds = np.zeros(LTR.shape[0])
-    emp = np.sum(LTR == 1) / LTR.shape[0]
+    emp = np.mean(LTR)  # Calcola la media di LTR per ottenere la percentuale di 1
     
+    bounds = np.zeros_like(LTR, dtype=float)
     bounds[LTR == 1] = C * priors[1] / emp
-    bounds[LTR == 0] = C * priors[0] / (1 - emp)
+    bounds[LTR == 0] = C * priors[0] / (1.0 - emp)
     
-    return list(zip(np.zeros(LTR.shape[0]), bounds))
-
+    return list(zip(np.zeros_like(LTR), bounds))
 
 def lagrangian(alpha, H):
     
@@ -93,18 +67,81 @@ class Linear_SVM:
         self.scores = self.scores.reshape(-1)
         
     
+class Polynomial_SVM:
+    def __init__(self, K, constant, degree, C):
+        self.K = K
+        self.C = C
+        self.degree = degree
+        self.constant = constant
+        
+    def train(self, DTR, LTR, DTE, LTE, prior):
+        self.DTR = DTR
+        self.LTR = LTR
+        self.DTE = DTE
+        self.LTE = LTE
+        self.prior = prior
+        
+        Z = 2*LTR -1    
+        Z = mCol(Z)
+        self.Z = Z
+        
+        polynomial_kernel_DTR = (np.dot(self.DTR.T,self.DTR) + self.constant)**self.degree
+        
+        #regularize the kernel function by adding K^2
+        polynomial_kernel_DTR = polynomial_kernel_DTR + self.K**2
 
+        H = Z * Z.T * polynomial_kernel_DTR
+
+        # Compute Dual solution
+        alpha = np.zeros(self.DTR.shape[1])
+        
+        #bounds_list = [(0,self.C)] * LTR.size
+        
+        bounds = weighted_bounds(self.C, self.LTR, [self.prior, 1-self.prior])
+
+
+        (x, dual_objective, d) = opt.fmin_l_bfgs_b(lagrangian, x0=alpha, args=(H,), approx_grad=False, bounds=bounds, factr=1.0)
+        
+        self.alpha = x
+        
+    def calculate_scores(self):
+        
+        polynomial_kernel_DTE = (np.dot(self.DTR.T,self.DTE) + self.constant) ** self.degree + self.K**2
+        self.scores = np.sum( mCol(self.alpha) * self.Z * polynomial_kernel_DTE, axis=0)
+        
     
+
 class Radial_SVM:
     def __init__(self, K, C, gamma):
         self.K = K
         self.C = C
         self.gamma = gamma
-        
-class Polynomial_SVM:
-    def __init__(self, K, C, d, c):
-        self.K = K
-        self.C = C
-        self.d = d
-        self.c = c
     
+    def train(self, DTR, LTR, DTE, LTE, prior):
+        self.DTR = DTR
+        self.LTR = LTR
+        self.DTE = DTE
+        self.LTE = LTE
+        self.prior = prior
+        
+        Z = 2*LTR -1    
+        Z = mCol(Z)
+        self.Z = Z
+        
+        radial_kernel_DTR = np.exp(-self.gamma * np.linalg.norm(self.DTR[:, :, np.newaxis] - self.DTR[:, np.newaxis, :], axis=0)**2) + self.K**2
+        
+        H = Z * Z.T * radial_kernel_DTR
+        
+        x0 = np.zeros(LTR.size)  
+        bounds = weighted_bounds(self.C, self.LTR, [self.prior, 1-self.prior])
+        
+        (alpha_star, dual_objective, d) = opt.fmin_l_bfgs_b(lagrangian,args=(H,), approx_grad=False, x0=x0, bounds=bounds, factr=1.0)
+
+        self.alpha = alpha_star
+
+
+    
+    def calculate_scores(self):
+        
+        radial_kernel_DTE = np.exp(-self.gamma * np.linalg.norm(self.DTR[:, :, np.newaxis] - self.DTE[:, np.newaxis, :], axis=0)**2) + self.K * self.K
+        self.scores = np.sum(np.dot(self.alpha * mRow(self.Z), radial_kernel_DTE), axis=0)
