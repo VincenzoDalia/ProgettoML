@@ -5,6 +5,7 @@ from Models.MVG import *
 from Training.train_mvg import *
 from Training.train_logistic_regression import *
 from Training.train_svm import *
+from Training.train_gmm import *
 
 
 if __name__ == '__main__':
@@ -74,5 +75,11 @@ if __name__ == '__main__':
     # Train SVM #
 
     #SVM_diff_priors(training_data, training_label)
-    RadKernBased_diff_priors(training_data, training_label)
+    #RadKernBased_diff_priors(training_data, training_label)
     #Poly_SVM_diff_priors(training_data, training_label)
+    
+    
+    
+    # Train GMM #
+    
+    GMM_diff_priors(training_data, training_label)
