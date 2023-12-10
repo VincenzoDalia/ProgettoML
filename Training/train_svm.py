@@ -3,8 +3,258 @@ from Functions.reshape_functions import *
 from Functions.kfold import *
 from Models.SVM import *
 from Preprocessing.PCA import *
+from Preprocessing.ZNorm import *
 from Metrics.DCF import *
 from Metrics.ROC import *
+
+
+###     SVM  GRAPHS    ###
+
+    ###  Linear SVM      ###
+
+# Grafico in cui fisso K e trovo C ottimale per Raw,ZNorm,PCA,PCA+ZNorm # (Lo eseguo per K=1)
+def svm_comparation_plot(D, L, prior, K):
+    C_values = np.logspace(-5, 5, num=15)
+    svm = Linear_SVM
+    
+    min_dcf_results_raw = [MIN_DCF(0.5, 1, 1, Label, SPost)
+               for C in C_values 
+               for SPost, Label in [kfold(D, L, svm(K,C), 5, prior)]]    
+    
+    print("RAW done")
+    
+    D_Znorm = znorm(D)
+    min_dcf_results_znorm = [MIN_DCF(0.5, 1, 1, Label, SPost)
+               for C in C_values 
+               for SPost, Label in [kfold(D_Znorm, L, svm(K,C), 5, prior)]]
+    
+    print("ZNorm done")
+    
+    D_PCA_11, _ = PCA(D, 11)
+    min_dcf_results_pca_11 = [MIN_DCF(0.5, 1, 1, Label, SPost)
+               for C in C_values 
+               for SPost, Label in [kfold(D_PCA_11, L, svm(K,C), 5, prior)]]
+    
+    print("PCA 11 done")
+    
+    D_PCA_Znorm_11, _  = PCA(D_Znorm, 11)
+    min_dcf_results_pca_znorm_11 = [MIN_DCF(0.5, 1, 1, Label, SPost)
+               for C in C_values 
+               for SPost, Label in [kfold(D_PCA_Znorm_11, L, svm(K,C), 5, prior)]]
+    
+    print("PCA 11 + ZNorm done")
+    
+    
+    
+    plt.figure()
+    plt.xlabel("C")
+    plt.xscale("log")
+    plt.ylabel("minDCF")
+    plt.title("Linear SVM Comparation Graph (K=1)")
+    
+    plt.plot(C_values, min_dcf_results_raw, label="minDCF(RAW)", color='blue')
+    plt.plot(C_values, min_dcf_results_znorm, label="minDCF(Z-norm)",  color='green')
+    plt.plot(C_values, min_dcf_results_pca_11, label="minDCF(PCA 11)",  color='orange')
+    plt.plot(C_values, min_dcf_results_pca_znorm_11, label="minDCF(PCA 11 + Z-norm)",  color='red')
+    
+    plt.xlim(C_values[0], C_values[-1])
+    plt.legend(loc='upper left')
+    plt.savefig("Training/SVM_Plot/Linear SVM Comparation Graph (K=1).pdf")
+    plt.close()
+
+
+# Grafico RAW con K fissato, con pi che varia per trovare C
+def linear_svm_raw_plot(D, L, prior, K):
+    C_values = np.logspace(-5, 5, num=15)
+    svm = Linear_SVM
+    
+    pi_values = [0.5, 0.1, 0.9]
+    
+    results = [(MIN_DCF(pi_values[0], 1, 1, Label, SPost),
+                MIN_DCF(pi_values[1], 1, 1, Label, SPost),
+                MIN_DCF(pi_values[2], 1, 1, Label, SPost)) 
+               for C in C_values 
+               for SPost, Label in [kfold(D, L, svm(K,C), 5, prior)]]
+    
+    plt.figure()
+    plt.xlabel("C")
+    plt.xscale("log")
+    plt.ylabel("minDCF")
+    plt.title("Linear SVM - RAW (K=1, pi_T=0.5)")
+    
+    plt.plot(C_values, results[0], label="minDCF pi=0.5", color='blue')
+    plt.plot(C_values, results[1], label="minDCF pi=0.1",  color='green')
+    plt.plot(C_values, results[2], label="minDCF pi=0.9",  color='orange')
+    
+    plt.xlim(C_values[0], C_values[-1])
+    plt.legend(loc='upper left')
+    plt.savefig(f"Training/SVM_Plot/Linear SVM RAW (different pi).pdf")
+    plt.close()
+    
+
+# Grafico ZNorm con K fissato, con pi che varia per trovare C
+def linear_svm_znorm_plot(D, L,prior, K):
+    C_values = np.logspace(-5, 5, num=15)
+    svm = Linear_SVM
+    
+    D_Znorm = znorm(D)
+    
+    pi_values = [0.5, 0.1, 0.9]
+    
+    results = [(MIN_DCF(pi_values[0], 1, 1, Label, SPost),
+                MIN_DCF(pi_values[1], 1, 1, Label, SPost),
+                MIN_DCF(pi_values[2], 1, 1, Label, SPost)) 
+               for C in C_values 
+               for SPost, Label in [kfold(D_Znorm, L, svm(K,C), 5, prior)]]
+    
+    plt.figure()
+    plt.xlabel("C")
+    plt.xscale("log")
+    plt.ylabel("minDCF")
+    plt.title("Linear SVM - ZNorm (K=1, pi_T=0.5)")
+    
+    plt.plot(C_values, results[0], label="minDCF pi=0.5", color='blue')
+    plt.plot(C_values, results[1], label="minDCF pi=0.1",  color='green')
+    plt.plot(C_values, results[2], label="minDCF pi=0.9",  color='orange')
+    
+    plt.xlim(C_values[0], C_values[-1])
+    plt.legend(loc='upper left')
+    plt.savefig(f"Training/SVM_Plot/Linear SVM ZNorm (different pi).pdf")
+    plt.close()
+    
+    
+
+###  Polynomial SVM  ###
+   
+
+# Grafico RAW con K fissato, con pi che varia per trovare C
+def polynomial_svm_raw_plot(D, L, prior, K):
+    C_values = np.logspace(-5, 5, num=15)
+    svm = Polynomial_SVM
+    
+    degree = 2
+    constant = 1
+    
+    pi_values = [0.5, 0.1, 0.9]
+    
+    results = [(MIN_DCF(pi_values[0], 1, 1, Label, SPost),
+                MIN_DCF(pi_values[1], 1, 1, Label, SPost),
+                MIN_DCF(pi_values[2], 1, 1, Label, SPost)) 
+               for C in C_values 
+               for SPost, Label in [kfold(D, L, svm(K,constant,degree,C), 5, prior)]]
+    
+    plt.figure()
+    plt.xlabel("C")
+    plt.xscale("log")
+    plt.ylabel("minDCF")
+    plt.title("Polynomial SVM - RAW (K=1, d=2, c=1, pi_T=0.5)")
+    
+    plt.plot(C_values, results[0], label="minDCF pi=0.5", color='blue')
+    plt.plot(C_values, results[1], label="minDCF pi=0.1",  color='green')
+    plt.plot(C_values, results[2], label="minDCF pi=0.9",  color='orange')
+    
+    plt.xlim(C_values[0], C_values[-1])
+    plt.legend(loc='upper left')
+    plt.savefig(f"Training/SVM_Plot/Polynomial SVM RAW (different pi).pdf")
+    plt.close()
+    
+
+# Grafico ZNorm con K fissato, con pi che varia per trovare C
+def polynomial_svm_znorm_plot(D, L,prior, K):
+    C_values = np.logspace(-5, 5, num=15)
+    svm = Polynomial_SVM
+    
+    degree = 2
+    constant = 1
+    
+    D_Znorm = znorm(D)
+    
+    pi_values = [0.5, 0.1, 0.9]
+    
+    results = [(MIN_DCF(pi_values[0], 1, 1, Label, SPost),
+                MIN_DCF(pi_values[1], 1, 1, Label, SPost),
+                MIN_DCF(pi_values[2], 1, 1, Label, SPost)) 
+               for C in C_values 
+               for SPost, Label in [kfold(D_Znorm, L, svm(K,constant,degree,C), 5, prior)]]
+    
+    plt.figure()
+    plt.xlabel("C")
+    plt.xscale("log")
+    plt.ylabel("minDCF")
+    plt.title("Linear SVM - ZNorm (K=1, d=2, c=1, pi_T=0.5)")
+    
+    plt.plot(C_values, results[0], label="minDCF pi=0.5", color='blue')
+    plt.plot(C_values, results[1], label="minDCF pi=0.1",  color='green')
+    plt.plot(C_values, results[2], label="minDCF pi=0.9",  color='orange')
+    
+    plt.xlim(C_values[0], C_values[-1])
+    plt.legend(loc='upper left')
+    plt.savefig(f"Training/SVM_Plot/Linear SVM ZNorm (different pi).pdf")
+    plt.close()
+
+
+
+###  Radial SVM      ###
+
+def radial_svm_raw_plot(D, L, prior, K):
+    C_values = np.logspace(-5, 5, num=15)
+    svm = Radial_SVM
+    
+    gamma = [0.001, 0.01, 0.1]
+    
+    results = [(MIN_DCF(0.5, 1, 1, Label, SPost),
+                MIN_DCF(0.5, 1, 1, Label, SPost),
+                MIN_DCF(0.5, 1, 1, Label, SPost)) 
+               for C in C_values 
+               for SPost, Label in [kfold(D, L, svm(K,C,gamma), 5, prior)]]
+    
+    plt.figure()
+    plt.xlabel("C")
+    plt.xscale("log")
+    plt.ylabel("minDCF")
+    plt.title("Radial SVM - RAW (K=1, pi=0.5, pi_T=0.5)")
+    
+    plt.plot(C_values, results[0], label="minDCF gamma=0.001", color='blue')
+    plt.plot(C_values, results[1], label="minDCF gamma=0.01",  color='green')
+    plt.plot(C_values, results[2], label="minDCF gamma=0.1",  color='orange')
+    
+    plt.xlim(C_values[0], C_values[-1])
+    plt.legend(loc='upper left')
+    plt.savefig(f"Training/SVM_Plot/Radial SVM RAW (different gamma).pdf")
+    plt.close()
+    
+def radial_svm_znorm_plot(D, L, prior, K):
+    C_values = np.logspace(-5, 5, num=15)
+    svm = Radial_SVM
+    
+    D_Znorm = znorm(D)
+    
+    gamma = [0.001, 0.01, 0.1]
+    
+    results = [(MIN_DCF(0.5, 1, 1, Label, SPost),
+                MIN_DCF(0.5, 1, 1, Label, SPost),
+                MIN_DCF(0.5, 1, 1, Label, SPost)) 
+               for C in C_values 
+               for SPost, Label in [kfold(D_Znorm, L, svm(K,C,gamma), 5, prior)]]
+    
+    plt.figure()
+    plt.xlabel("C")
+    plt.xscale("log")
+    plt.ylabel("minDCF")
+    plt.title("Radial SVM - ZNorm (K=1, pi=0.5, pi_T=0.5)")
+    
+    plt.plot(C_values, results[0], label="minDCF gamma=0.001", color='blue')
+    plt.plot(C_values, results[1], label="minDCF gamma=0.01",  color='green')
+    plt.plot(C_values, results[2], label="minDCF gamma=0.1",  color='orange')
+    
+    plt.xlim(C_values[0], C_values[-1])
+    plt.legend(loc='upper left')
+    plt.savefig(f"Training/SVM_Plot/Radial SVM ZNorm (different gamma).pdf")
+    plt.close()
+
+
+
+###     SVM  TABLES    ###
 
 def SVM_diff_priors(D, L):
     C = 10
@@ -26,8 +276,6 @@ def SVM_diff_priors(D, L):
         res = MIN_DCF(pi, 1, 1, Label, SPost)
         print(f"min_DCF (pi_T = {pi_T}, pi = {pi}) : {round(res, 3)}")
 
-
-
 def RadKernBased_diff_priors(D, L):
     C = 10
     lbd = 0.001
@@ -48,7 +296,6 @@ def RadKernBased_diff_priors(D, L):
         SPost, Label = kfold(D, L, svm, 5, pi_T)
         res = MIN_DCF(pi, 1, 1, Label, SPost)
         print(f"min_DCF (pi_T = {pi_T}, pi = {pi}) : {round(res, 3)}")
-
 
 def Poly_SVM_diff_priors(D, L):
     C = 0.001

@@ -65,12 +65,27 @@ if __name__ == '__main__':
     
     print("Training Logistic Regression...\n")
     
-    comparation_plot(training_data, training_label, 0.5)
+    #comparation_plot(training_data, training_label, 0.5)
+    #comparation_plot_2(training_data, training_label, 0.5)
     #simple_Logistic_Regression_Graph(training_data,training_label,0.5)
     #ZNorm_Logistic_Regression_Graph(training_data, training_label, 0.5)
+    #different_Pi_T_Raw_Graph(training_data, training_label)
+    #different_Pi_T_znorm_Graph(training_data, training_label)
+    #PCA_Logistic_Regression_Graph_various_Pi(training_data, training_label, 0.5)
+    #PCA_Logistic_Regression_Graph_various_Pi(training_data, training_label, 0.9)
+    #PCA_Logistic_Regression_Graph_various_Pi(training_data, training_label, 0.1)
+    #PCA_Logistic_Regression_Graph_various_Pi_T(training_data, training_label, 0.5)
+    #PCA_Logistic_Regression_Graph_various_Pi_T(training_data, training_label, 0.9)
+    #PCA_Logistic_Regression_Graph_various_Pi_T(training_data, training_label, 0.1)
     #LR_diff_priors(training_data,training_label)
+    #LR_diff_priors_zscore(training_data,training_label)
+    
+    # ------------------ Quadratic Logistic Regression Training ------------------ #
+    
+    quadratic_comparation_plot(training_data, training_label, 0.5)
+    quadratic_comparation_plot_2(training_data, training_label, 0.5)
     #Quad_LR_diff_priors(training_data,training_label)
-    #PCA_Logistic_Regression_Graph(training_data, training_label, 0.5)
+    
     
     print("Training Logistic Regression... Done\n")
 
