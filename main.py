@@ -7,6 +7,8 @@ from Training.train_mvg import *
 from Training.train_logistic_regression import *
 from Training.train_svm import *
 from Training.train_gmm import *
+from Calibration.Calibrate import *
+from Metrics.BayesErr import * 
 
 
 if __name__ == '__main__':
@@ -77,27 +79,123 @@ if __name__ == '__main__':
     #PCA_Logistic_Regression_Graph_various_Pi_T(training_data, training_label, 0.5)
     #PCA_Logistic_Regression_Graph_various_Pi_T(training_data, training_label, 0.9)
     #PCA_Logistic_Regression_Graph_various_Pi_T(training_data, training_label, 0.1)
+    
     #LR_diff_priors(training_data,training_label)
     #LR_diff_priors_zscore(training_data,training_label)
     
     # ------------------ Quadratic Logistic Regression Training ------------------ #
     
-    quadratic_comparation_plot(training_data, training_label, 0.5)
-    quadratic_comparation_plot_2(training_data, training_label, 0.5)
-    #Quad_LR_diff_priors(training_data,training_label)
+    #quadratic_comparation_plot(training_data, training_label, 0.5)
+    #quadratic_comparation_plot_2(training_data, training_label, 0.5)
     
+    #Quad_LR_diff_priors(training_data,training_label)
+    #Quad_LR_diff_priors(training_data,training_label, True)
     
     print("Training Logistic Regression... Done\n")
 
     # Train SVM #
+    
+    print("Training SVM...\n")
+    
+    #svm_comparation_plot(training_data, training_label, 0.5, 1)
+    #print("SVM comparation plot done\n")
+    #linear_svm_raw_plot(training_data, training_label, 0.5, 1)
+    #print("Linear SVM raw plot done\n")
+    linear_svm_znorm_plot(training_data, training_label, 0.5, 1)
+    print("Linear SVM znorm plot done\n")
+    #polynomial_svm_raw_plot(training_data, training_label, 0.5, 1)
+    #print("Polynomial SVM raw plot done\n")
+    polynomial_svm_znorm_plot(training_data, training_label, 0.5, 1)
+    print("Polynomial SVM znorm plot done\n")
+    #radial_svm_raw_plot(training_data, training_label, 0.5, 1)
+    #print("Radial SVM raw plot done\n")
+    #radial_svm_znorm_plot(training_data, training_label, 0.5, 1)
+    print("Radial SVM znorm plot done\n")
 
     #SVM_diff_priors(training_data, training_label)
+    #SVM_diff_priors(training_data, training_label, True) # ZNorm
     #RadKernBased_diff_priors(training_data, training_label)
+    #RadKernBased_diff_priors(training_data, training_label, True)  # ZNorm
     #Poly_SVM_diff_priors(training_data, training_label)
+    #Poly_SVM_diff_priors(training_data, training_label, True)  # ZNorm
     
+    print("Training SVM... Done\n")
     
     
     # Train GMM #
     
+     ### Graphs ###
+    """  
+    print("Training GMM...\n")
+    print("Plotting GMM RAW and ZNorm...")
+    #GMM_ZNorm_plot_diff_component(training_data, training_label)
+    print("Plotting GMM RAW and ZNorm... Done\n")
+    print("Plotting GMM RAW and PCA11...") 
+    GMM_PCA11_plot_diff_component(training_data, training_label)
+    print("Plotting GMM RAW and PCA11... Done\n")
+    print("Plotting GMM RAW and PCA10...")
+    GMM_PCA10_plot_diff_component(training_data, training_label)
+    print("Plotting GMM RAW and PCA10... Done\n")
+    print("Plotting TiedGMM RAW and ZNorm...")
+    TiedGMM_ZNorm_plot_diff_component(training_data, training_label)
+    print("Plotting TiedGMM RAW and ZNorm... Done\n")
+    print("Plotting TiedGMM RAW and PCA11...")
+    TiedGMM_PCA11_plot_diff_component(training_data, training_label)
+    print("Plotting TiedGMM RAW and PCA11... Done\n")
+    print("Plotting TiedGMM RAW and PCA10...")
+    TiedGMM_PCA10_plot_diff_component(training_data, training_label)
+    print("Plotting TiedGMM RAW and PCA10... Done\n")
+    print("Plotting DiagGMM RAW and ZNorm...")
+    DiagonalGMM_ZNorm_plot_diff_component(training_data, training_label)
+    print("Plotting DiagGMM RAW and ZNorm... Done\n")
+    print("Plotting DiagGMM RAW and PCA11...")
+    DiagonalGMM_PCA11_plot_diff_component(training_data, training_label)
+    print("Plotting DiagGMM RAW and PCA11... Done\n")
+    print("Plotting DiagGMM RAW and PCA10...")
+    DiagonalGMM_PCA10_plot_diff_component(training_data, training_label)
+    print("Plotting DiagGMM RAW and PCA10... Done\n")
+    print("Plotting TiedDiagGMM RAW and ZNorm...")
+    TiedDiagonalGMM_ZNorm_plot_diff_component(training_data, training_label)
+    print("Plotting TiedDiagGMM RAW and ZNorm... Done\n")
+    print("Plotting TiedDiagGMM RAW and PCA11...")
+    TiedDiagonalGMM_PCA11_plot_diff_component(training_data, training_label)
+    print("Plotting TiedDiagGMM RAW and PCA11... Done\n")
+    print("Plotting TiedDiagGMM RAW and PCA10...")
+    TiedDiagonalGMM_PCA10_plot_diff_component(training_data, training_label)
+    print("Plotting TiedDiagGMM RAW and PCA10... Done\n")
+    print("GMM Graphs... Done\n") """
+    
     #GMM_diff_priors(training_data, training_label)
     #GMM_diff_priors_znorm(training_data, training_label)
+    
+    
+    
+        # ----------------- Calibration ----------------- #
+    
+    #Plot un-calibrated candidate models
+    """ scores,labels = LR_candidate(training_data, training_label)
+    Bayes_Error(labels, scores, "Uncalibrated_LR")
+    print("Uncalibrated LR... Done\n")
+    scores,labels = SVM_candidate(training_data, training_label)
+    Bayes_Error(labels, scores, "Uncalibrated_SVM")
+    print("Uncalibrated SVM... Done\n")
+    scores,labels = GMM_candidate(training_data, training_label)
+    Bayes_Error(labels, scores, "Uncalibrated_GMM")
+    print("Uncalibrated GMM... Done\n") 
+    
+    
+    #Plot ucalibrated candidate models
+    scores,labels = LR_candidate(training_data, training_label)
+    calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
+    Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_LR")
+    print("Calibrated LR... Done\n")
+    
+    scores,labels = SVM_candidate(training_data, training_label)
+    calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
+    Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_SVM")
+    print("Calibrated SVM... Done\n")
+    
+    scores,labels = GMM_candidate(training_data, training_label)
+    calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
+    Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_GMM")
+    print("Calibrated GMM... Done\n")  """

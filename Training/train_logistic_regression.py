@@ -325,7 +325,20 @@ def PCA_Logistic_Regression_Graph_various_Pi_T(D, L, prior):
     plt.legend()
     plt.savefig(f"Training/Logistic_Regression_Plot/Linear Logistic Regression PCA different pi_t  - Pi = 0.5 - Pi_T = {prior}.pdf")
     plt.close()
+  
+  
+def LR_candidate(D,L):
     
+    l = 0.01
+    pi_T = 0.1
+    
+    lr = BinaryLogisticRegression(l)
+    
+    SPost,Label = kfold(D,L,lr,5,pi_T)
+    
+    return SPost,Label
+
+  
 ### ---------------------- Quadratic Logistic Regression ---------------------- ###
 
 def calculate_min_dcf_quadratic(l_values, D, L, prior, znorm=False):
@@ -433,7 +446,7 @@ def quadratic_comparation_plot_2(D, L, prior):
     plt.savefig("Training/Logistic_Regression_Plot/Quadratic Logistic Regression Comparison 2.pdf")
     plt.close()   
     
-def Quad_LR_diff_priors(D, L, znorm=False):
+def Quad_LR_diff_priors(D, L, ZNorm=False):
     l = 100
     priors = [
         (0.5, 0.5),
@@ -446,7 +459,7 @@ def Quad_LR_diff_priors(D, L, znorm=False):
         (0.9, 0.1),
         (0.9, 0.9),
     ]
-    if znorm:
+    if ZNorm:
         D = znorm(D)
         
     regression = QuadraticLogisticRegression(l)
@@ -454,4 +467,4 @@ def Quad_LR_diff_priors(D, L, znorm=False):
     for pi_T, pi in priors:
         SPost, Label = kfold(D, L, regression, 5, pi_T)
         res = MIN_DCF(pi, 1, 1, Label, SPost)
-        print(f"min_DCF{'_znorm' if znorm else ''} (pi_T = {pi_T}, pi = {pi}) : {round(res, 3)}")
+        print(f"min_DCF{'_znorm' if ZNorm else ''} (pi_T = {pi_T}, pi = {pi}) : {round(res, 3)}")

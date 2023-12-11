@@ -51,14 +51,6 @@ def logpdf_gmm(X, gmm):
     log_probs = np.vstack(log_probs)
     return np.logaddexp.reduce(log_probs, axis=0)
 
-    
-def constr_eigenv(psi, gmm):
-    for i, (mean, weight, covNew) in enumerate(gmm):
-        U, s, Vt = np.linalg.svd(covNew, full_matrices=False)
-        s[s < psi] = psi
-        gmm[i] = (mean, weight, U @ np.diag(s) @ Vt)
-
-    return gmm
 
 def tied_cov(gmm, vec, n):
     sigmas = np.array([component[2] for component in gmm])
@@ -77,6 +69,16 @@ def TiedDiagonal_cov(gmm, vec, n):
     tied_diagonal_gmm = diagonal_cov(tied_cov(gmm, vec, n), vec, n)
     return tied_diagonal_gmm
 
+
+
+
+def constr_eigenv(psi, gmm):
+    for i, (mean, weight, covNew) in enumerate(gmm):
+        U, s, Vt = np.linalg.svd(covNew, full_matrices=False)
+        s[s < psi] = psi
+        gmm[i] = (mean, weight, U @ np.diag(s) @ Vt)
+
+    return gmm
 
 def EM(X, gmm, psi, type):
     
@@ -141,11 +143,9 @@ def LBG(iterations, X, gmm, alpha, psi, type):
         elif type == "Tied":
             return tied_cov(gmm, [X.shape[1]], X.shape[1])
         elif type == "Diagonal":
-            pass
-           #return diagonal_cov(gmm, [X_shape_1], X_shape_1)
+            return diagonal_cov(gmm, [X.shape[1]], X.shape[1])
         elif type == "Tied-Diagonal":
-           pass
-           #return TiedDiagonal_cov(gmm, [X_shape_1], X_shape_1)
+            return TiedDiagonal_cov(gmm, [X.shape[1]], X.shape[1])
 
     gmm_start = initialize_gmm(gmm, X, type)
     gmm_start = constr_eigenv(psi, gmm_start)
@@ -157,7 +157,6 @@ def LBG(iterations, X, gmm, alpha, psi, type):
         gmm_start = EM(X, gmm_start, psi, type)
 
     return gmm_start
-
 
 def gmm_scores(D, L, gmm):
     unique_labels = np.unique(L)
@@ -175,14 +174,14 @@ def gmm_scores(D, L, gmm):
 
 
 
-####          GMM Models         ####
+####          GMM Model         ####
 
 class GMM:
-    def __init__(self, iterations, alpha=0.1, psi=0.01):
+    def __init__(self, iterations, name, alpha=0.1, psi=0.01):
         self.iterations = iterations
         self.alpha = alpha
         self.psi = psi
-        self.name = "GMM"
+        self.name = name  # Possible Names: GMM, Tied, Diagonal, Tied-Diagonal
         
     def train(self, DTR, LTR, DTE, LTE, prior):
         self.DTR = DTR
@@ -193,21 +192,16 @@ class GMM:
         
         n_classes = np.unique(self.LTR).size
         
-        # Inizializza una lista vuota per contenere gli oggetti LBG
         gmm = []
 
-        # Itera attraverso le classi da 0 a num_classes - 1
         for classes in range(n_classes):
-            # Seleziona le colonne corrispondenti alla classe corrente
+            
             selected_columns = self.DTR[:, self.LTR == classes]
             
-            # Calcola la media e la covarianza delle colonne selezionate
             class_mean_cov = calculate_mean_covariance(selected_columns)
             
-            # Crea una lista contenente il valore 1 e la media/covarianza calcolata
             class_data = [1, *class_mean_cov]
             
-            # Inizializza un oggetto LBG con i parametri appropriati
             lbg_object = LBG(
                 self.iterations,
                 selected_columns,
@@ -217,7 +211,6 @@ class GMM:
                 self.name
             )
             
-            # Aggiungi l'oggetto LBG alla lista
             gmm.append(lbg_object)
             
         self.gmm = gmm
@@ -226,37 +219,3 @@ class GMM:
         
         self.scores = gmm_scores(self.DTE, self.LTE, self.gmm)
 
-
-class GMM_Tied:
-    def __init__(self, iterations, alpha=0.1, psi=0.01):
-        self.iterations = iterations
-        self.alpha = alpha
-        self.psi = psi
-        self.name = "Tied"
-
-    def train(self, DTR, LTR, DTE, LTE, eff_prior):
-        self.DTR = DTR
-        self.DTE = DTE
-        self.LTR = LTR
-        self.LTE = LTE
-
-        num_classes = np.unique(self.LTR).size
-
-        gmm = [
-            LBG(
-                self.iterations,
-                self.DTR[:, self.LTR == classes],
-                [[1, *calculate_mean_covariance(self.DTR[:, self.LTR == classes])]],
-                self.alpha,
-                self.psi,
-                self.name,
-            )
-            for classes in range(num_classes)
-        ]
-
-        self.gmm = gmm
-
-    def calculate_scores(self):
-        self.scores = gmm_scores(self.DTE, self.LTE, self.gmm)
-
-    
