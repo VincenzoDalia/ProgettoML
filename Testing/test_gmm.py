@@ -15,8 +15,7 @@ def GMM_candidate_test(DTR,LTR,DTE,LTE):
     #4 components --> 2 iterations
     gmm = GMM(2,"GMM")
     
-    DTR_pca, _ = PCA(DTR, 11)
-    DTE_pca, _ = PCA(DTE, 11)
+    DTR_pca, DTE_pca = PCA(DTR, 11, DTE)
     
     gmm.train(DTR_pca, LTR, DTE_pca, LTE, None)
     gmm.calculate_scores()
