@@ -342,15 +342,14 @@ def LR_candidate_train(D,L):
 
 
 def calibrated_LR_dcf(D, L, prior):
-    print(f"LR - min_dcf / act_dcf  {prior} \n")
     llr, Label = LR_candidate_train(D, L)
     llr_cal, Label_cal = calibrate(llr, Label, 0.5)
     predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)
     conf_matrix = confusionMatrix(Label_cal, predicted_labels)
     min_dcf = MIN_DCF(prior, 1, 1, Label_cal, llr_cal)
     act_dcf = DCF(prior, conf_matrix, 1, 1, True)
-    print("LR (train) min_dcf: ", round(min_dcf, 3))
-    print("LR (train) act_dcf: ", round(act_dcf, 3))
+    print(f"LR (train) {prior}     min_dcf: {round(min_dcf, 3)}        act_dcf: {round(act_dcf, 3)}")
+   
   
 ### ---------------------- Quadratic Logistic Regression ---------------------- ###
 
