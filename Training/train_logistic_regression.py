@@ -1,11 +1,13 @@
 import numpy as np
-from Metrics.DCF import MIN_DCF
+from Metrics.DCF import *
 from Functions.kfold import kfold
 from Preprocessing.PCA import PCA
 from Preprocessing.ZNorm import znorm
 from Models.LogisticRegression import BinaryLogisticRegression, QuadraticLogisticRegression
 import matplotlib.pyplot as plt
 from functools import partial
+from Calibration.Calibrate import *
+from Metrics.BayesErr import *
 
 def plot_results(min_dcf_05, min_dcf_01, min_dcf_09, name, title):
     lambda_values = np.logspace(-5, 5, num=21)
@@ -338,6 +340,17 @@ def LR_candidate(D,L):
     
     return SPost,Label
 
+
+def calibrated_LR_dcf(D, L, prior):
+    print(f"LR - min_dcf / act_dcf  {prior} \n")
+    llr, Label = LR_candidate(D, L)
+    llr_cal, Label_cal = calibrate(llr, Label, 0.5)
+    predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)
+    conf_matrix = confusionMatrix(Label_cal, predicted_labels)
+    min_dcf = MIN_DCF(prior, 1, 1, Label_cal, llr_cal)
+    act_dcf = DCF(prior, conf_matrix, 1, 1, True)
+    print("LR (train) min_dcf: ", round(min_dcf, 3))
+    print("LR (train) act_dcf: ", round(act_dcf, 3))
   
 ### ---------------------- Quadratic Logistic Regression ---------------------- ###
 

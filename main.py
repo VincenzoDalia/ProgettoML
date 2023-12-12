@@ -101,16 +101,16 @@ if __name__ == '__main__':
     #print("SVM comparation plot done\n")
     #linear_svm_raw_plot(training_data, training_label, 0.5, 1)
     #print("Linear SVM raw plot done\n")
-    linear_svm_znorm_plot(training_data, training_label, 0.5, 1)
-    print("Linear SVM znorm plot done\n")
+    #linear_svm_znorm_plot(training_data, training_label, 0.5, 1)
+    #print("Linear SVM znorm plot done\n")
     #polynomial_svm_raw_plot(training_data, training_label, 0.5, 1)
     #print("Polynomial SVM raw plot done\n")
-    polynomial_svm_znorm_plot(training_data, training_label, 0.5, 1)
-    print("Polynomial SVM znorm plot done\n")
+    #polynomial_svm_znorm_plot(training_data, training_label, 0.5, 1)
+    #print("Polynomial SVM znorm plot done\n")
     #radial_svm_raw_plot(training_data, training_label, 0.5, 1)
     #print("Radial SVM raw plot done\n")
     #radial_svm_znorm_plot(training_data, training_label, 0.5, 1)
-    print("Radial SVM znorm plot done\n")
+    #print("Radial SVM znorm plot done\n")
 
     #SVM_diff_priors(training_data, training_label)
     #SVM_diff_priors(training_data, training_label, True) # ZNorm
@@ -199,3 +199,18 @@ if __name__ == '__main__':
     calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
     Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_GMM")
     print("Calibrated GMM... Done\n")  """
+    
+    
+    # ---------------- Validation ---------------- #
+    
+    calibrated_LR_dcf(training_data, training_label, 0.5)
+    calibrated_SVM_dcf(training_data, training_label, 0.5)
+    calibrated_GMM_dcf(training_data, training_label, 0.5)
+    
+    calibrated_LR_dcf(training_data, training_label, 0.1)
+    calibrated_SVM_dcf(training_data, training_label, 0.1)
+    calibrated_GMM_dcf(training_data, training_label, 0.1)
+    
+    calibrated_LR_dcf(training_data, training_label, 0.9)
+    calibrated_SVM_dcf(training_data, training_label, 0.9)
+    calibrated_GMM_dcf(training_data, training_label, 0.9)

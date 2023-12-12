@@ -7,6 +7,8 @@ from Metrics.DCF import *
 from Metrics.ROC import *
 from Preprocessing.ZNorm import *
 import matplotlib.pyplot as plt
+from Metrics.BayesErr import *
+from Calibration.Calibrate import *
 
 ### GMM Graphs ##
 
@@ -501,6 +503,18 @@ def GMM_candidate(D,L):
     SPost, Label = kfold(D_pca, L, gmm, 5, None)
     
     return SPost, Label
+
+
+def calibrated_GMM_dcf(D, L, prior):
+    print(f"GMM - min_dcf / act_dcf  {prior} \n")
+    llr, Label = GMM_candidate(D, L)
+    llr_cal, Label_cal = calibrate(llr, Label, 0.5)
+    predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)
+    conf_matrix = confusionMatrix(Label_cal, predicted_labels)
+    min_dcf = MIN_DCF(prior, 1, 1, Label_cal, llr_cal)
+    act_dcf = DCF(prior, conf_matrix, 1, 1, True)
+    print("GMM (train) min_dcf: ", round(min_dcf, 3))
+    print("GMM (train) act_dcf: ", round(act_dcf, 3))
 
 
  

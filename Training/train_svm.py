@@ -7,6 +7,8 @@ from Preprocessing.ZNorm import *
 from Metrics.DCF import *
 from Metrics.ROC import *
 import matplotlib.pyplot as plt
+from Metrics.BayesErr import *
+from Calibration.Calibrate import *
 
 
 ###     SVM  GRAPHS    ###
@@ -306,6 +308,18 @@ def SVM_candidate(D,L):
     SPost, Label = kfold(D_Znorm, L, svm, 5, pi_T)
     
     return SPost, Label
+
+
+def calibrated_SVM_dcf(D, L, prior):
+    print(f"SVM - min_dcf / act_dcf  {prior} \n")
+    llr, Label = SVM_candidate(D, L)
+    llr_cal, Label_cal = calibrate(llr, Label, 0.5)
+    predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)
+    conf_matrix = confusionMatrix(Label_cal, predicted_labels)
+    min_dcf = MIN_DCF(prior, 1, 1, Label_cal, llr_cal)
+    act_dcf = DCF(prior, conf_matrix, 1, 1, True)
+    print("LR (train) min_dcf: ", round(min_dcf, 3))
+    print("LR (train) act_dcf: ", round(act_dcf, 3))
 
 ###     SVM  TABLES    ###
 
