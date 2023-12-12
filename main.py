@@ -9,9 +9,11 @@ from Training.train_svm import *
 from Training.train_gmm import *
 from Calibration.Calibrate import *
 from Metrics.BayesErr import * 
+from Metrics.ROC import * 
 from Testing.test_gmm import *
 from Testing.test_lr import *
 from Testing.test_svm import *
+
 
 
 
@@ -69,7 +71,7 @@ if __name__ == '__main__':
         
     # Train Logistic Regression #
     
-    print("Training Logistic Regression...\n")
+    #print("Training Logistic Regression...\n")
     
     #comparation_plot(training_data, training_label, 0.5)
     #comparation_plot_2(training_data, training_label, 0.5)
@@ -95,11 +97,11 @@ if __name__ == '__main__':
     #Quad_LR_diff_priors(training_data,training_label)
     #Quad_LR_diff_priors(training_data,training_label, True)
     
-    print("Training Logistic Regression... Done\n")
+    #print("Training Logistic Regression... Done\n")
 
     # Train SVM #
     
-    print("Training SVM...\n")
+    #print("Training SVM...\n")
     
     #svm_comparation_plot(training_data, training_label, 0.5, 1)
     #print("SVM comparation plot done\n")
@@ -123,7 +125,7 @@ if __name__ == '__main__':
     #Poly_SVM_diff_priors(training_data, training_label)
     #Poly_SVM_diff_priors(training_data, training_label, True)  # ZNorm
     
-    print("Training SVM... Done\n")
+    #print("Training SVM... Done\n")
     
     
     # Train GMM #
@@ -186,9 +188,10 @@ if __name__ == '__main__':
     scores,labels = GMM_candidate_train(training_data, training_label)
     Bayes_Error(labels, scores, "Uncalibrated_GMM")
     print("Uncalibrated GMM... Done\n") 
-    
+    """
     
     #Plot ucalibrated candidate models
+    """
     scores,labels = LR_candidate_train(training_data, training_label)
     calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
     Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_LR")
@@ -205,13 +208,16 @@ if __name__ == '__main__':
     print("Calibrated GMM... Done\n")  """
     
     
-    # ---------------- Validation ---------------- #
+    # ---------------- Validation and Evaluation ---------------- #
     
-    print("\n")
     
-    #calibrated_LR_train_dcf(training_data, training_label, 0.5)
-    #calibrated_SVM_train_dcf(training_data, training_label, 0.5)
-    #calibrated_GMM_train_dcf(training_data, training_label, 0.5)
+    """ print("\n")
+    print("Computing minDCF and actDCF for Validation and Evaluation of Calibrated Models...\n")
+    
+    # pi = 0.5
+    calibrated_LR_train_dcf(training_data, training_label, 0.5)
+    calibrated_SVM_train_dcf(training_data, training_label, 0.5)
+    calibrated_GMM_train_dcf(training_data, training_label, 0.5)
     
     calibrated_LR_test_dcf(training_data, training_label, test_data, test_label, 0.5)
     calibrated_SVM_test_dcf(training_data, training_label, test_data, test_label, 0.5)
@@ -219,9 +225,10 @@ if __name__ == '__main__':
     
     print("\n")    
     
-    #calibrated_LR_train_dcf(training_data, training_label, 0.1)
-    #calibrated_SVM_train_dcf(training_data, training_label, 0.1)
-    #calibrated_GMM_train_dcf(training_data, training_label, 0.1)
+    # pi = 0.1
+    calibrated_LR_train_dcf(training_data, training_label, 0.1)
+    calibrated_SVM_train_dcf(training_data, training_label, 0.1)
+    calibrated_GMM_train_dcf(training_data, training_label, 0.1)
     
     calibrated_LR_test_dcf(training_data, training_label, test_data, test_label, 0.1)
     calibrated_SVM_test_dcf(training_data, training_label, test_data, test_label, 0.1)
@@ -229,12 +236,37 @@ if __name__ == '__main__':
     
     print("\n")
     
-    #calibrated_LR_train_dcf(training_data, training_label, 0.9)
-    #calibrated_SVM_train_dcf(training_data, training_label, 0.9)
-    #calibrated_GMM_train_dcf(training_data, training_label, 0.9)
+    # pi = 0.9
+    calibrated_LR_train_dcf(training_data, training_label, 0.9)
+    calibrated_SVM_train_dcf(training_data, training_label, 0.9)
+    calibrated_GMM_train_dcf(training_data, training_label, 0.9)
     
     calibrated_LR_test_dcf(training_data, training_label, test_data, test_label, 0.9)
     calibrated_SVM_test_dcf(training_data, training_label, test_data, test_label, 0.9)
     calibrated_GMM_test_dcf(training_data, training_label, test_data, test_label, 0.9) 
     
-    print("\n")
+    print("Computing minDCF and actDCF for Validation and Evaluation of Calibrated Models... Done\n")
+    print("\n") """
+    
+    
+    ## ROC e Bayes Error Comparison between models (Evaluation)##
+    
+    print("Computing scores and labels for LR, SVM and GMM ...")
+    LR_scores, LR_labels = LR_candidate_test(training_data, training_label, test_data, test_label)
+    SVM_scores, SVM_labels = SVM_candidate_test(training_data, training_label, test_data, test_label)
+    GMM_scores, GMM_labels = GMM_candidate_test(training_data, training_label, test_data, test_label)
+    
+    print("Computing scores and labels for LR, SVM and GMM ...Done!")
+    
+    print("Computing calibrated scores and labels for LR, SVM and GMM ...")
+    LR_calibrated_scores, LR_calibrated_labels = calibrate(LR_scores, LR_labels,0.5)
+    SVM_calibrated_scores, SVM_calibrated_labels = calibrate(SVM_scores, SVM_labels,0.5)
+    GMM_calibrated_scores, GMM_calibrated_labels = calibrate(GMM_scores, GMM_labels,0.5)
+    print("Computing calibrated scores and labels for LR, SVM and GMM ...Done!\n")
+    
+    print("Plotting ROC curves for Calibrated Models (Evaluation)...\n")
+    plot_ROC_comparison(LR_calibrated_scores, LR_calibrated_labels, SVM_calibrated_scores, SVM_calibrated_labels, GMM_calibrated_scores, GMM_calibrated_labels)
+    print("Plotting ROC curves for Calibrated Models (Evaluation)... Done\n")
+    
+    print("Plotting Bayes Error for Calibrated Models (Evaluation)...\n")
+    print("Plotting Bayes Error for Calibrated Models (Evaluation)... Done\n")
