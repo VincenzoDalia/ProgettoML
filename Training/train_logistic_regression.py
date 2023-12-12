@@ -329,7 +329,7 @@ def PCA_Logistic_Regression_Graph_various_Pi_T(D, L, prior):
     plt.close()
   
   
-def LR_candidate(D,L):
+def LR_candidate_train(D,L):
     
     l = 0.01
     pi_T = 0.1
@@ -343,7 +343,7 @@ def LR_candidate(D,L):
 
 def calibrated_LR_dcf(D, L, prior):
     print(f"LR - min_dcf / act_dcf  {prior} \n")
-    llr, Label = LR_candidate(D, L)
+    llr, Label = LR_candidate_train(D, L)
     llr_cal, Label_cal = calibrate(llr, Label, 0.5)
     predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)
     conf_matrix = confusionMatrix(Label_cal, predicted_labels)

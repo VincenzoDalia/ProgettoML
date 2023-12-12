@@ -494,7 +494,7 @@ def TiedDiagonalGMM_PCA10_plot_diff_component(D, L):
     plt.savefig("Training/GMM_Plot/TiedDiagonalGMM_RAW+PCA10.pdf")
 
 
-def GMM_candidate(D,L):
+def GMM_candidate_train(D,L):
     
     #4 components --> 2 iterations
     gmm = GMM(2,"GMM")
@@ -507,7 +507,7 @@ def GMM_candidate(D,L):
 
 def calibrated_GMM_dcf(D, L, prior):
     print(f"GMM - min_dcf / act_dcf  {prior} \n")
-    llr, Label = GMM_candidate(D, L)
+    llr, Label = GMM_candidate_train(D, L)
     llr_cal, Label_cal = calibrate(llr, Label, 0.5)
     predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)
     conf_matrix = confusionMatrix(Label_cal, predicted_labels)

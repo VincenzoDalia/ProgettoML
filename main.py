@@ -173,29 +173,29 @@ if __name__ == '__main__':
         # ----------------- Calibration ----------------- #
     
     #Plot un-calibrated candidate models
-    """ scores,labels = LR_candidate(training_data, training_label)
+    """ scores,labels = LR_candidate_train(training_data, training_label)
     Bayes_Error(labels, scores, "Uncalibrated_LR")
     print("Uncalibrated LR... Done\n")
-    scores,labels = SVM_candidate(training_data, training_label)
+    scores,labels = SVM_candidate_train(training_data, training_label)
     Bayes_Error(labels, scores, "Uncalibrated_SVM")
     print("Uncalibrated SVM... Done\n")
-    scores,labels = GMM_candidate(training_data, training_label)
+    scores,labels = GMM_candidate_train(training_data, training_label)
     Bayes_Error(labels, scores, "Uncalibrated_GMM")
     print("Uncalibrated GMM... Done\n") 
     
     
     #Plot ucalibrated candidate models
-    scores,labels = LR_candidate(training_data, training_label)
+    scores,labels = LR_candidate_train(training_data, training_label)
     calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
     Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_LR")
     print("Calibrated LR... Done\n")
     
-    scores,labels = SVM_candidate(training_data, training_label)
+    scores,labels = SVM_candidate_train(training_data, training_label)
     calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
     Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_SVM")
     print("Calibrated SVM... Done\n")
     
-    scores,labels = GMM_candidate(training_data, training_label)
+    scores,labels = GMM_candidate_train(training_data, training_label)
     calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
     Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_GMM")
     print("Calibrated GMM... Done\n")  """

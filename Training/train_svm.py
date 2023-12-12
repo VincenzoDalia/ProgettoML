@@ -297,7 +297,7 @@ def radial_svm_znorm_plot(D, L, prior, K):
     plt.savefig(f"Training/SVM_Plot/Radial SVM ZNorm (different gamma).pdf")
     plt.close()
 
-def SVM_candidate(D,L):
+def SVM_candidate_train(D,L):
     D_Znorm = znorm(D)
     l = 0.1
     C = 5
@@ -312,7 +312,7 @@ def SVM_candidate(D,L):
 
 def calibrated_SVM_dcf(D, L, prior):
     print(f"SVM - min_dcf / act_dcf  {prior} \n")
-    llr, Label = SVM_candidate(D, L)
+    llr, Label = SVM_candidate_train(D, L)
     llr_cal, Label_cal = calibrate(llr, Label, 0.5)
     predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)
     conf_matrix = confusionMatrix(Label_cal, predicted_labels)
