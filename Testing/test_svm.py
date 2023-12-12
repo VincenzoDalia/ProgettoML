@@ -30,9 +30,9 @@ def SVM_candidate_test(DTR,LTR,DTE,LTE):
     return scores, LTE
 
 
-def calibrated_LR_test_dcf(DTR, LTR, DTE, LTE, prior):
+def calibrated_SVM_test_dcf(DTR, LTR, DTE, LTE, prior):
     
-    llr, Label = SVM_candidate_test(DTR, LTR, DTE, LTE, prior)
+    llr, Label = SVM_candidate_test(DTR, LTR, DTE, LTE)
     
     llr_cal, Label_cal = calibrate(llr, Label, 0.5)
     predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)

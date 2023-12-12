@@ -9,6 +9,10 @@ from Training.train_svm import *
 from Training.train_gmm import *
 from Calibration.Calibrate import *
 from Metrics.BayesErr import * 
+from Testing.test_gmm import *
+from Testing.test_lr import *
+from Testing.test_svm import *
+
 
 
 if __name__ == '__main__':
@@ -203,14 +207,34 @@ if __name__ == '__main__':
     
     # ---------------- Validation ---------------- #
     
-    calibrated_LR_dcf(training_data, training_label, 0.5)
-    calibrated_SVM_dcf(training_data, training_label, 0.5)
-    calibrated_GMM_dcf(training_data, training_label, 0.5)
+    print("\n")
     
-    calibrated_LR_dcf(training_data, training_label, 0.1)
-    calibrated_SVM_dcf(training_data, training_label, 0.1)
-    calibrated_GMM_dcf(training_data, training_label, 0.1)
+    #calibrated_LR_train_dcf(training_data, training_label, 0.5)
+    #calibrated_SVM_train_dcf(training_data, training_label, 0.5)
+    #calibrated_GMM_train_dcf(training_data, training_label, 0.5)
     
-    calibrated_LR_dcf(training_data, training_label, 0.9)
-    calibrated_SVM_dcf(training_data, training_label, 0.9)
-    calibrated_GMM_dcf(training_data, training_label, 0.9)
+    calibrated_LR_test_dcf(training_data, training_label, test_data, test_label, 0.5)
+    calibrated_SVM_test_dcf(training_data, training_label, test_data, test_label, 0.5)
+    calibrated_GMM_test_dcf(training_data, training_label, test_data, test_label, 0.5)
+    
+    print("\n")    
+    
+    #calibrated_LR_train_dcf(training_data, training_label, 0.1)
+    #calibrated_SVM_train_dcf(training_data, training_label, 0.1)
+    #calibrated_GMM_train_dcf(training_data, training_label, 0.1)
+    
+    calibrated_LR_test_dcf(training_data, training_label, test_data, test_label, 0.1)
+    calibrated_SVM_test_dcf(training_data, training_label, test_data, test_label, 0.1)
+    calibrated_GMM_test_dcf(training_data, training_label, test_data, test_label, 0.1) 
+    
+    print("\n")
+    
+    #calibrated_LR_train_dcf(training_data, training_label, 0.9)
+    #calibrated_SVM_train_dcf(training_data, training_label, 0.9)
+    #calibrated_GMM_train_dcf(training_data, training_label, 0.9)
+    
+    calibrated_LR_test_dcf(training_data, training_label, test_data, test_label, 0.9)
+    calibrated_SVM_test_dcf(training_data, training_label, test_data, test_label, 0.9)
+    calibrated_GMM_test_dcf(training_data, training_label, test_data, test_label, 0.9) 
+    
+    print("\n")

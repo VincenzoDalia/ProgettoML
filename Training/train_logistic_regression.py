@@ -341,7 +341,7 @@ def LR_candidate_train(D,L):
     return SPost,Label
 
 
-def calibrated_LR_dcf(D, L, prior):
+def calibrated_LR_train_dcf(D, L, prior):
     llr, Label = LR_candidate_train(D, L)
     llr_cal, Label_cal = calibrate(llr, Label, 0.5)
     predicted_labels = optimal_bayes_decision(llr_cal, prior, 1, 1)
