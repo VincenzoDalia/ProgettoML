@@ -36,7 +36,7 @@ def plot_ROC_comparison(LR_scores, LR_LTE, SVM_scores, SVM_LTE, GMM_scores, GMM_
     SVM_FPR, SVM_TPR = ROC(SVM_LTE, SVM_scores)
     GMM_FPR, GMM_TPR = ROC(GMM_LTE, GMM_scores)
     
-        
+    plt.figure()    
     plt.xlim([-0.1, 1.1])
     plt.ylim([-0.1, 1.1])
     plt.grid()
@@ -47,5 +47,8 @@ def plot_ROC_comparison(LR_scores, LR_LTE, SVM_scores, SVM_LTE, GMM_scores, GMM_
     plt.xlabel("False Positive Rate")
     plt.ylabel("True Positive Rate")
     plt.title("ROC Curve Comparison")
-    plt.savefig("Testing\ROC_comparison.pdf")
+    plt.savefig("Testing/ROC_comparison.pdf")
     plt.close()
+    
+    
+    
