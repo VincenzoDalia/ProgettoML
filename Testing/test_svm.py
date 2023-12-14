@@ -55,7 +55,7 @@ def RadialSVM_EVAL(DTR, LTR, DTE, LTE, prior, ZNorm=False):
         DTE = znorm(DTE)
         string_to_append = "_znorm"
     
-    C_values = numpy.logspace(-5, 5, num=11)
+    C_values = numpy.logspace(-5, 5, num=1)
     gamma_values = [0.1, 0.01, 0.001]
     min_dcf_results = {gamma: {'val': [], 'eval': []} for gamma in gamma_values}
 
@@ -63,12 +63,12 @@ def RadialSVM_EVAL(DTR, LTR, DTE, LTE, prior, ZNorm=False):
         for c in C_values:
             svm = Radial_SVM(1, c, gamma)
 
-            SPost, Label = kfold(svm, 5, DTR, LTR, prior)
+            SPost, Label = kfold( DTR, LTR, svm, 5, prior)
             res_val = MIN_DCF(0.5, 1, 1, Label, SPost)
             min_dcf_results[gamma]['val'].append(res_val)
 
             svm.train(DTR, LTR, DTE, LTE, 0.5)
-            svm.compute_scores()
+            svm.calculate_scores()
             scores = svm.scores
             res_eval = MIN_DCF(0.5, 1, 1, LTE, scores)
             min_dcf_results[gamma]['eval'].append(res_eval)

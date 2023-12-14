@@ -251,7 +251,7 @@ if __name__ == '__main__':
     
     ## ROC e Bayes Error Comparison between models (Evaluation)##
     
-    print("Computing scores and labels for LR, SVM and GMM ...")
+    """ print("Computing scores and labels for LR, SVM and GMM ...")
     LR_scores, LR_labels = LR_candidate_test(training_data, training_label, test_data, test_label)
     SVM_scores, SVM_labels = SVM_candidate_test(training_data, training_label, test_data, test_label)
     GMM_scores, GMM_labels = GMM_candidate_test(training_data, training_label, test_data, test_label)
@@ -270,4 +270,7 @@ if __name__ == '__main__':
     
     print("Plotting Bayes Error for Calibrated Models (Evaluation)...\n")
     plot_Bayes_Error_Comparison(LR_calibrated_labels, LR_calibrated_scores, SVM_calibrated_labels, SVM_calibrated_scores, GMM_calibrated_labels, GMM_calibrated_scores, "Calibrated")
-    print("Plotting Bayes Error for Calibrated Models (Evaluation)... Done\n")
+    print("Plotting Bayes Error for Calibrated Models (Evaluation)... Done\n") """
+    
+    RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, False) #RAW
+    RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
