@@ -265,8 +265,9 @@ if __name__ == '__main__':
     print("Computing calibrated scores and labels for LR, SVM and GMM ...Done!\n")
     
     print("Plotting ROC curves for Calibrated Models (Evaluation)...\n")
-    plot_ROC_comparison(LR_calibrated_scores, LR_calibrated_labels, SVM_calibrated_scores, SVM_calibrated_labels, GMM_calibrated_scores, GMM_calibrated_labels)
+    #plot_ROC_comparison(LR_calibrated_scores, LR_calibrated_labels, SVM_calibrated_scores, SVM_calibrated_labels, GMM_calibrated_scores, GMM_calibrated_labels)
     print("Plotting ROC curves for Calibrated Models (Evaluation)... Done\n")
     
     print("Plotting Bayes Error for Calibrated Models (Evaluation)...\n")
+    plot_Bayes_Error_Comparison(LR_calibrated_labels, LR_calibrated_scores, SVM_calibrated_labels, SVM_calibrated_scores, GMM_calibrated_labels, GMM_calibrated_scores, "Calibrated")
     print("Plotting Bayes Error for Calibrated Models (Evaluation)... Done\n")
