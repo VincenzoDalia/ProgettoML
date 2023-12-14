@@ -275,6 +275,6 @@ if __name__ == '__main__':
     print("LR Evaluation...")
     LR_Raw_Eval(training_data, training_label, test_data, test_label, 0.5, False) #RAW
     LR_Raw_Eval(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
-    print("SVM Evaluation...")
-    RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, False) #RAW
-    RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
+    #print("SVM Evaluation...")
+    #RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, False) #RAW
+    #RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
