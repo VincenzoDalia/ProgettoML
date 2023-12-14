@@ -272,5 +272,9 @@ if __name__ == '__main__':
     plot_Bayes_Error_Comparison(LR_calibrated_labels, LR_calibrated_scores, SVM_calibrated_labels, SVM_calibrated_scores, GMM_calibrated_labels, GMM_calibrated_scores, "Calibrated")
     print("Plotting Bayes Error for Calibrated Models (Evaluation)... Done\n") """
     
+    print("LR Evaluation...")
+    LR_Raw_Eval(training_data, training_label, test_data, test_label, 0.5, False) #RAW
+    LR_Raw_Eval(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
+    print("SVM Evaluation...")
     RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, False) #RAW
     RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm

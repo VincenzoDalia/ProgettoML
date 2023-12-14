@@ -55,7 +55,7 @@ def RadialSVM_EVAL(DTR, LTR, DTE, LTE, prior, ZNorm=False):
         DTE = znorm(DTE)
         string_to_append = "_znorm"
     
-    C_values = numpy.logspace(-5, 5, num=1)
+    C_values = numpy.logspace(-5, 5, num=11)
     gamma_values = [0.1, 0.01, 0.001]
     min_dcf_results = {gamma: {'val': [], 'eval': []} for gamma in gamma_values}
 
@@ -81,8 +81,8 @@ def RadialSVM_EVAL(DTR, LTR, DTE, LTE, prior, ZNorm=False):
 
     colors = ['red', 'blue', 'green']
     for gamma, color in zip(gamma_values, colors):
-        plt.plot(C_values, min_dcf_results[gamma]['val'], label=f"logγ = {numpy.log10(gamma)} (VAL)", color=color)
-        plt.plot(C_values, min_dcf_results[gamma]['eval'], label=f"logγ = {numpy.log10(gamma)} (EVAL)", color=color, linestyle="dashed")
+        plt.plot(C_values, min_dcf_results[gamma]['val'], label=f"gamma= {gamma} (VAL)", color=color)
+        plt.plot(C_values, min_dcf_results[gamma]['eval'], label=f"gamma = {gamma} (EVAL)", color=color, linestyle="dashed")
 
     plt.xlim(C_values[0], C_values[-1])
     plt.legend()
