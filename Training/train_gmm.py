@@ -496,11 +496,10 @@ def TiedDiagonalGMM_PCA10_plot_diff_component(D, L):
 
 def GMM_candidate_train(D,L):
     
-    #4 components --> 2 iterations
-    gmm = GMM(2,"GMM")
+    #8 components --> 3 iterations
+    gmm = GMM(3,"Tied")
     
-    D_pca, _ = PCA(D, 11)
-    SPost, Label = kfold(D_pca, L, gmm, 5, None)
+    SPost, Label = kfold(D, L, gmm, 5, None)
     
     return SPost, Label
 
