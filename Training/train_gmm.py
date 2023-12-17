@@ -536,6 +536,9 @@ def GMM_diff_priors(D, L):
     for pi in [0.5, 0.1, 0.9]:
         run_gmm_model(GMM(2,"GMM"), 2, pi, "GMM min_DCF + PCA(11)", D_pca, L)
         
+    for pi in [0.5, 0.1, 0.9]:
+        run_gmm_model(GMM(3, "Tied"), 3, pi, "Tied_GMM min_DCF + PCA(11)", D_pca, L)
+ 
     D_pca, _ = PCA(D, 10)
 
     for pi in [0.5, 0.1, 0.9]:
