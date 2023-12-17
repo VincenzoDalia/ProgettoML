@@ -46,9 +46,11 @@ def TiedGMM_EVAL(DTR, LTR, DTE, LTE, prior):
     DTR_znorm = znorm(DTR)
     DTE_znorm = znorm(DTE)
     
-    tied = GMM(i,"Tied")
+    
     
     for i in range(5):
+        
+        tied = GMM(i,"Tied")
         
         SPost, Label = kfold( DTR, LTR, tied, 5, prior)
         res_val = MIN_DCF(0.5, 1, 1, Label, SPost)
@@ -80,12 +82,12 @@ def TiedGMM_EVAL(DTR, LTR, DTE, LTE, prior):
     
     plt.title("Tied GMM and Tied GMM + Znorm")
     
-    plt.bar( x_axis+0.25, min_dcf_results, label="Training", color="orange", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
-    plt.bar( x_axis+0.25, min_dcf_results_eval, label="Evaluation", color="blue", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
-    plt.bar( x_axis+0.25, min_dcf_results_znorm, label="Training Z-Norm", color="green", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
-    plt.bar( x_axis+0.25, min_dcf_results_znorm_eval, label="Evaluation Z-Norm", color="red", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
+    plt.bar( x_axis+0.75, min_dcf_results, label="Training", color="orange", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
+    plt.bar( x_axis+0.75, min_dcf_results_eval, label="Evaluation", color="blue", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
+    plt.bar( x_axis+0.75, min_dcf_results_znorm, label="Training Z-Norm", color="green", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
+    plt.bar( x_axis+0.75, min_dcf_results_znorm_eval, label="Evaluation Z-Norm", color="red", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
     
-    plt.xticks([r + 0.125 for r in range(len(bounds))], [2**i for i in bounds])
+    plt.xticks([r * 1.25 + 0.375 for r in range(len(bounds))], [2**i for i in bounds])
     plt.legend()
     plt.title("Tied GMM")
     plt.xlabel("Iteration")
