@@ -318,8 +318,8 @@ if __name__ == '__main__':
      """
      
     #print("LR Evaluation Plot...")
-    #LR_Raw_Eval(training_data, training_label, test_data, test_label, 0.5, False) #RAW
-    #LR_Raw_Eval(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
+    #LR_Eval(training_data, training_label, test_data, test_label, 0.5, False) #RAW
+    #LR_Eval(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
     #print("LR Evaluation Plot...Done!")
     
     #print("SVM Evaluation Plot...")
