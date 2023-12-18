@@ -2,9 +2,9 @@ import numpy as np
 from Functions.confusion_matrix import confusionMatrix
 
 
-def DCF(pi, confMatrix, C_fn, C_fp, normalized):
+def DCF(pi, confusionMatr, C_fn, C_fp, normalized):
         
-        (TN, FN), (FP, TP) = confMatrix
+        (TN, FN), (FP, TP) = confusionMatr
         
         FNR = FN / (FN + TP)
         FPR = FP / (FP + TN)

@@ -51,6 +51,6 @@ def compute_Sw(dataset, label):
 def LDA(matrix, label, m):
     Sb = compute_Sb(matrix, label)
     Sw = compute_Sw(matrix, label)
-    s, U = scipy.linalg.eigh(Sb, Sw)
+    _, U = scipy.linalg.eigh(Sb, Sw)
     W = U[:, ::-1][:, 0:m]
     return W
