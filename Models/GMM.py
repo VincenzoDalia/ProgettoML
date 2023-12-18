@@ -50,7 +50,7 @@ def logpdf_gmm(X, gmm):
     return np.logaddexp.reduce(log_probs, axis=0)
 
 
-def tied_cov(gmm, vec, n):
+def tied_covariance(gmm, vec, n):
     sigmas = np.array([component[2] for component in gmm])
     weights = np.array(vec) / n
     new_sigma = np.average(sigmas, weights=weights, axis=0)
@@ -59,18 +59,18 @@ def tied_cov(gmm, vec, n):
 
     return updated_gmm
 
-def diagonal_cov(gmm, vec, n):
+def diagonal_covariance(gmm, vec, n):
     return [(g[0], g[1], np.diag(np.diag(g[2]))) for g in gmm]
 
 
-def TiedDiagonal_cov(gmm, vec, n):
-    tied_diagonal_gmm = diagonal_cov(tied_cov(gmm, vec, n), vec, n)
+def tiedDiagonal_covariance(gmm, vec, n):
+    tied_diagonal_gmm = diagonal_covariance(tied_covariance(gmm, vec, n), vec, n)
     return tied_diagonal_gmm
 
 
 
 
-def constr_eigenv(psi, gmm):
+def constrain_eigen(psi, gmm):
     for i, (mean, weight, covNew) in enumerate(gmm):
         U, s, Vt = np.linalg.svd(covNew, full_matrices=False)
         s[s < psi] = psi
@@ -107,13 +107,13 @@ def EM(X, gmm, psi, type):
             gmm_new.append((w, mu, sigma))
 
         if type == "Tied":
-            gmm_new = tied_cov(gmm_new, Z_vec, X_shape_1)
+            gmm_new = tied_covariance(gmm_new, Z_vec, X_shape_1)
         elif type == "Diagonal":
-            gmm_new = diagonal_cov(gmm_new, Z_vec, X_shape_1)
+            gmm_new = diagonal_covariance(gmm_new, Z_vec, X_shape_1)
         elif type == "Tied-Diagonal":
-            gmm_new = TiedDiagonal_cov(gmm_new, Z_vec, X_shape_1)
+            gmm_new = tiedDiagonal_covariance(gmm_new, Z_vec, X_shape_1)
 
-        gmm = constr_eigenv(psi, gmm_new)
+        gmm = constrain_eigen(psi, gmm_new)
 
         llr_0 = llr_1
         llr_1 = np.mean(logSMarginal)
@@ -139,19 +139,19 @@ def LBG(iterations, X, gmm, alpha, psi, type):
         if type == "GMM":
             return gmm
         elif type == "Tied":
-            return tied_cov(gmm, [X.shape[1]], X.shape[1])
+            return tied_covariance(gmm, [X.shape[1]], X.shape[1])
         elif type == "Diagonal":
-            return diagonal_cov(gmm, [X.shape[1]], X.shape[1])
+            return diagonal_covariance(gmm, [X.shape[1]], X.shape[1])
         elif type == "Tied-Diagonal":
-            return TiedDiagonal_cov(gmm, [X.shape[1]], X.shape[1])
+            return tiedDiagonal_covariance(gmm, [X.shape[1]], X.shape[1])
 
     gmm_start = initialize_gmm(gmm, X, type)
-    gmm_start = constr_eigenv(psi, gmm_start)
+    gmm_start = constrain_eigen(psi, gmm_start)
     gmm_start = EM(X, gmm_start, psi, type)
 
     for _ in range(iterations):
         gmm_start = update_gmm(gmm_start, alpha)
-        gmm_start = constr_eigenv(psi, gmm_start)
+        gmm_start = constrain_eigen(psi, gmm_start)
         gmm_start = EM(X, gmm_start, psi, type)
 
     return gmm_start

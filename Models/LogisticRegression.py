@@ -32,11 +32,11 @@ class BinaryLogisticRegression:
         
         w, b = v[:-1], v[-1]
 
-        priors = np.array([self.eff_prior, 1 - self.eff_prior])
+        priors = np.array([self.prior, 1 - self.prior])
 
         first_elem = (self.l / 2) * np.linalg.norm(w) ** 2
 
-        loss_funct = []
+        loss_function = []
         classes = np.unique(self.LTR)
 
         for i in classes:
@@ -47,15 +47,15 @@ class BinaryLogisticRegression:
 
             exp_term = np.logaddexp(0, -z * (np.dot(w.T, self.DTR[:, indices]) + b))
 
-            loss_funct.append(const_class * np.sum(exp_term))
+            loss_function.append(const_class * np.sum(exp_term))
 
-        return first_elem + loss_funct[0] + loss_funct[1]
+        return first_elem + loss_function[0] + loss_function[1]
 
-    def train(self, DTR, LTR, DTE, LTE, eff_prior):
+    def train(self, DTR, LTR, DTE, LTE, prior):
         self.DTR = DTR
         self.LTR = LTR
         self.DTE = DTE
-        self.eff_prior = eff_prior
+        self.prior = prior
         self.LTE = LTE
         
         x0 = np.zeros(self.DTR.shape[0] + 1)
@@ -77,11 +77,11 @@ class QuadraticLogisticRegression:
         
         w, b = v[:-1], v[-1]
 
-        priors = np.array([self.eff_prior, 1 - self.eff_prior])
+        priors = np.array([self.prior, 1 - self.prior])
 
         first_elem = (self.l / 2) * np.linalg.norm(w) ** 2
 
-        loss_funct = []
+        loss_function = []
         classes = np.unique(self.LTR)
 
         for i in classes:
@@ -92,16 +92,16 @@ class QuadraticLogisticRegression:
 
             exp_term = np.logaddexp(0, -z * (np.dot(w.T, self.DTR[:, indices]) + b))
 
-            loss_funct.append(const_class * np.sum(exp_term))
+            loss_function.append(const_class * np.sum(exp_term))
 
-        return first_elem + loss_funct[0] + loss_funct[1]
+        return first_elem + loss_function[0] + loss_function[1]
 
-    def train(self, DTR, LTR, DTE, LTE, eff_prior):
+    def train(self, DTR, LTR, DTE, LTE, prior):
         quad_DTR, quad_DTE = polynomial_transformation(DTR, DTE)
         self.DTR = quad_DTR
         self.LTR = LTR
         self.DTE = quad_DTE
-        self.eff_prior = eff_prior
+        self.prior = prior
         self.LTE = LTE
         
         x0 = np.zeros(self.DTR.shape[0] + 1)
