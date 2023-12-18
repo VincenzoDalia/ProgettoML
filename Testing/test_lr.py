@@ -39,7 +39,7 @@ def calibrated_LR_test_dcf(DTR, LTR, DTE, LTE, prior):
     
     
     
-def LR_Raw_Eval(DTR, LTR, DTE, LTE, prior, ZNorm = False):
+def LR_Eval(DTR, LTR, DTE, LTE, prior, ZNorm = False):
     
     l_values = np.logspace(-5, 5, num=21)
     value = [0.5, 0.1, 0.9]
