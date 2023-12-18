@@ -10,9 +10,9 @@ def calibrate(scores, labels, prior):
     shuffled_labels = labels[indices]
     shuffled_scores = scores[indices].reshape(1, scores.size)
 
-    logreg = BinaryLogisticRegression(0)
+    lr = BinaryLogisticRegression(0)
 
-    scores_cv, labels_cv = kfold(shuffled_scores, shuffled_labels, logreg, 5,  0.5)
+    scores_cv, labels_cv = kfold(shuffled_scores, shuffled_labels, lr, 5,  0.5)
 
     calibrated_scores = scores_cv - np.log(prior / (1 - prior))
 

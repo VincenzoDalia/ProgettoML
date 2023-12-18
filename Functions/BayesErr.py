@@ -19,13 +19,13 @@ def optimal_bayes_decision(llr,pi,Cf_n,Cf_p):
 
 def Bayes_Error(L, scores, filename):
     
-    effPriorLogOdds = np.linspace(-3, 3, 50)    
+    logOdds = np.linspace(-3, 3, 50)    
 
     DCFs = []
     min_DCFs = []
     
     # calcolo effective prior
-    for p in effPriorLogOdds:
+    for p in logOdds:
         
         pi = 1/(1+np.exp(-p))
 
@@ -38,8 +38,8 @@ def Bayes_Error(L, scores, filename):
         DCFs.append(temp_DCF)
         
     plt.figure(figsize=(8,6))
-    plt.plot(effPriorLogOdds, DCFs, label="DCF", color="r")
-    plt.plot(effPriorLogOdds, min_DCFs, label="min DCF", color="b")
+    plt.plot(logOdds, DCFs, label="DCF", color="r")
+    plt.plot(logOdds, min_DCFs, label="min DCF", color="b")
     plt.ylim([0, 1.1])
     plt.xlim([-3, 3])
     plt.xlabel("Prior Log-odds")
@@ -55,7 +55,7 @@ def Bayes_Error(L, scores, filename):
     
 def plot_Bayes_Error_Comparison(L_LR, scores_LR, L_SVM, scores_SVM, L_GMM, scores_GMM, filename):
     
-    effPriorLogOdds = np.linspace(-3, 3, 50)    
+    logOdds = np.linspace(-3, 3, 50)    
 
     DCFs_LR = []
     min_DCFs_LR = []
@@ -67,7 +67,7 @@ def plot_Bayes_Error_Comparison(L_LR, scores_LR, L_SVM, scores_SVM, L_GMM, score
     min_DCFs_GMM = []
     
     #Logistic Regression
-    for p in effPriorLogOdds:
+    for p in logOdds:
         
         pi = 1/(1+np.exp(-p))
 
@@ -80,7 +80,7 @@ def plot_Bayes_Error_Comparison(L_LR, scores_LR, L_SVM, scores_SVM, L_GMM, score
         DCFs_LR.append(temp_DCF)
         
     #SVM
-    for p in effPriorLogOdds:
+    for p in logOdds:
         
         pi = 1/(1+np.exp(-p))
 
@@ -93,7 +93,7 @@ def plot_Bayes_Error_Comparison(L_LR, scores_LR, L_SVM, scores_SVM, L_GMM, score
         DCFs_SVM.append(temp_DCF)
         
     #GMM
-    for p in effPriorLogOdds:
+    for p in logOdds:
         
         pi = 1/(1+np.exp(-p))
 
@@ -106,12 +106,12 @@ def plot_Bayes_Error_Comparison(L_LR, scores_LR, L_SVM, scores_SVM, L_GMM, score
         DCFs_GMM.append(temp_DCF)
         
     plt.figure(figsize=(8,6))
-    plt.plot(effPriorLogOdds, DCFs_LR, label="DCF LR", color="r", linestyle="-")
-    plt.plot(effPriorLogOdds, min_DCFs_LR, label="min DCF LR", color="r", linestyle="--")
-    plt.plot(effPriorLogOdds, DCFs_SVM, label="DCF SVM", color="b", linestyle="-")
-    plt.plot(effPriorLogOdds, min_DCFs_SVM, label="min DCF SVM", color="b", linestyle="--")
-    plt.plot(effPriorLogOdds, DCFs_GMM, label="DCF GMM", color="g", linestyle="-")
-    plt.plot(effPriorLogOdds, min_DCFs_GMM, label="min DCF GMM", color="g", linestyle="--")
+    plt.plot(logOdds, DCFs_LR, label="DCF LR", color="r", linestyle="-")
+    plt.plot(logOdds, min_DCFs_LR, label="min DCF LR", color="r", linestyle="--")
+    plt.plot(logOdds, DCFs_SVM, label="DCF SVM", color="b", linestyle="-")
+    plt.plot(logOdds, min_DCFs_SVM, label="min DCF SVM", color="b", linestyle="--")
+    plt.plot(logOdds, DCFs_GMM, label="DCF GMM", color="g", linestyle="-")
+    plt.plot(logOdds, min_DCFs_GMM, label="min DCF GMM", color="g", linestyle="--")
     plt.ylim([0, 1.1])
     plt.xlim([-3, 3])
     plt.xlabel("Prior Log-odds")
