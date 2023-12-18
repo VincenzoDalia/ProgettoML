@@ -1,5 +1,4 @@
 from Functions.load import *
-from Dataset.Analysis.analysis import *
 import numpy as np
 from Models.MVG import *
 from Training.train_mvg import *
@@ -7,13 +6,15 @@ from Training.train_mvg import *
 from Training.train_logistic_regression import *
 from Training.train_svm import *
 from Training.train_gmm import *
-from Calibration.Calibrate import *
+from Functions.Calibrate import *
 from Metrics.BayesErr import * 
 from Metrics.ROC import * 
 from Testing.test_gmm import *
 from Testing.test_lr import *
 from Testing.test_svm import *
 
+
+from Functions.analysis import *
 
 
 
@@ -59,6 +60,28 @@ if __name__ == '__main__':
     
 
 
+    # ------------------- FEATURE ANALYSIS ------------------- #
+    #plot_histogram(training_data, training_label)
+    plot_scatter_matrix(training_data, training_label)
+    """ plot_LDA_hist(training_data, training_label, 1)
+    
+    #Plot heatmap for all the data
+    plot_heatmap(training_data, range(training_data.shape[1]), "", "YlGn", "Dataset/Analysis/Heatmaps/correlation_train.png")
+
+    #Plot the heatmap only for male
+    plot_heatmap(training_data, training_label==0, " - Male", "PuBu", "Dataset/Analysis/Heatmaps/male_correlation_train.png")
+
+    #Plot the heatmap only for female
+    plot_heatmap(training_data, training_label==1, " - Female", "YlOrRd", "Dataset/Analysis/Heatmaps/female_correlation_train.png")
+
+    # Plot explained variance graph
+    explained_variance(training_data) """
+
+
+
+
+    # ------------------- TRAINING ------------------- #
+
     # Train Gaussian Classifiers #
     
     #print("Training Gaussian Classifiers...\n")
@@ -66,7 +89,7 @@ if __name__ == '__main__':
     #train_NBGaussian_Classifier(training_data, training_label)
     #train_TiedGaussian_Classifier(training_data, training_label)
     #train_TiedNBGaussian_Classifier(training_data, training_label)
-    #print("Training Gaussian Classifiers... Done\n")
+    #print("Training Gaussian Classifiers... Done!\n")
         
         
     # Train Logistic Regression #
@@ -89,7 +112,13 @@ if __name__ == '__main__':
     #LR_diff_priors(training_data,training_label)
     #LR_diff_priors_zscore(training_data,training_label)
     
-    # ------------------ Quadratic Logistic Regression Training ------------------ #
+    #print("Training Logistic Regression...Done!\n")
+    
+    
+    
+    #  Train Quadratic Logistic Regression #
+    
+    #print("Training Quadratic Logistic Regression...\n")
     
     #quadratic_comparation_plot(training_data, training_label, 0.5)
     #quadratic_comparation_plot_2(training_data, training_label, 0.5)
@@ -97,7 +126,9 @@ if __name__ == '__main__':
     #Quad_LR_diff_priors(training_data,training_label)
     #Quad_LR_diff_priors(training_data,training_label, True)
     
-    #print("Training Logistic Regression... Done\n")
+    #print("Training Quadratic Logistic Regression... Done!\n")
+    
+    
 
     # Train SVM #
     
@@ -130,9 +161,11 @@ if __name__ == '__main__':
     
     # Train GMM #
     
+    #print("Training GMM...\n")
+    
      ### Graphs ###
     """  
-    print("Training GMM...\n")
+    
     print("Plotting GMM RAW and ZNorm...")
     #GMM_ZNorm_plot_diff_component(training_data, training_label)
     print("Plotting GMM RAW and ZNorm... Done\n")
@@ -174,9 +207,11 @@ if __name__ == '__main__':
     #GMM_diff_priors(training_data, training_label)
     #GMM_diff_priors_znorm(training_data, training_label)
     
+    #print("Training GMM...Done!\n")
     
     
-        # ----------------- Calibration ----------------- #
+    
+    # ----------------- Calibration ----------------- #
     
     #Plot un-calibrated candidate models
     #scores,labels = LR_candidate_train(training_data, training_label)
@@ -185,12 +220,12 @@ if __name__ == '__main__':
     #scores,labels = SVM_candidate_train(training_data, training_label)
     #Bayes_Error(labels, scores, "Uncalibrated_SVM")
     #print("Uncalibrated SVM... Done\n")
-    #scores,labels = GMM_candidate_train(training_data, training_label)
-    #Bayes_Error(labels, scores, "Uncalibrated_GMM")
-    #print("Uncalibrated GMM... Done\n") 
+    """ scores,labels = GMM_candidate_train(training_data, training_label)
+    Bayes_Error(labels, scores, "Uncalibrated_GMM")
+    print("Uncalibrated GMM... Done\n") 
+     """
     
-    
-    #Plot ucalibrated candidate models
+    #Plot calibrated candidate models
     
     #scores,labels = LR_candidate_train(training_data, training_label)
     #calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
@@ -202,11 +237,11 @@ if __name__ == '__main__':
     #Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_SVM")
     #print("Calibrated SVM... Done\n")
     
-    #scores,labels = GMM_candidate_train(training_data, training_label)
-    #calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
-    #Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_GMM")
-    #print("Calibrated GMM... Done\n") 
-    
+    """ scores,labels = GMM_candidate_train(training_data, training_label)
+    calibrated_scores, calibrated_labels = calibrate(scores, labels,0.5)
+    Bayes_Error(calibrated_labels, calibrated_scores, "Calibrated_GMM")
+    print("Calibrated GMM... Done\n") 
+     """
     
     # ---------------- Validation and Evaluation ---------------- #
     
@@ -270,14 +305,15 @@ if __name__ == '__main__':
     
     print("Plotting Bayes Error for Calibrated Models (Evaluation)...\n")
     plot_Bayes_Error_Comparison(LR_calibrated_labels, LR_calibrated_scores, SVM_calibrated_labels, SVM_calibrated_scores, GMM_calibrated_labels, GMM_calibrated_scores, "Calibrated")
-    print("Plotting Bayes Error for Calibrated Models (Evaluation)... Done\n")  """
-    
+    print("Plotting Bayes Error for Calibrated Models (Evaluation)... Done\n") 
+     """
     #print("LR Evaluation...")
     #LR_Raw_Eval(training_data, training_label, test_data, test_label, 0.5, False) #RAW
     #LR_Raw_Eval(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
     #print("SVM Evaluation...")
     #RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, False) #RAW
     #RadialSVM_EVAL(training_data, training_label, test_data, test_label, 0.5, True)  #ZNorm
-    print("GMM Evaluation...")
-    TiedGMM_EVAL(training_data, training_label, test_data, test_label, 0.5)
-    print("GMM Evaluation... Done\n")
+    
+
+    #TiedGMM_EVAL(training_data, training_label, test_data, test_label, 0.5)
+    

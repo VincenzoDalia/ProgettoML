@@ -6,7 +6,7 @@ from Preprocessing.ZNorm import znorm
 from Models.LogisticRegression import BinaryLogisticRegression, QuadraticLogisticRegression
 import matplotlib.pyplot as plt
 from functools import partial
-from Calibration.Calibrate import *
+from Functions.Calibrate import *
 from Metrics.BayesErr import *
 
 def plot_results(min_dcf_05, min_dcf_01, min_dcf_09, name, title):

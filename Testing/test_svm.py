@@ -8,7 +8,7 @@ from Metrics.ROC import *
 from Preprocessing.ZNorm import *
 import matplotlib.pyplot as plt
 from Metrics.BayesErr import *
-from Calibration.Calibrate import *
+from Functions.Calibrate import *
 
 
 

@@ -8,7 +8,7 @@ from Metrics.DCF import *
 from Metrics.ROC import *
 import matplotlib.pyplot as plt
 from Metrics.BayesErr import *
-from Calibration.Calibrate import *
+from Functions.Calibrate import *
 
 
 ###     SVM  GRAPHS    ###
