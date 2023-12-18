@@ -1,5 +1,5 @@
 import numpy as np
-from Metrics.confusion_matrix import confusionMatrix
+from Functions.confusion_matrix import confusionMatrix
 import matplotlib.pyplot as plt
 
 

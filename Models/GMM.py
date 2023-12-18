@@ -5,12 +5,10 @@ import scipy
 ####          GMM Functions         ####
 
 def vrow(array):
-    # trasforma un array in un vettore riga (1 riga, n colonne)
     return array.reshape((1, array.size))
 
 
 def vcol(array):
-    # trasforma un array in un vettore colonna (n righe, 1 colonna)
     return array.reshape((array.size, 1))
 
 
@@ -25,7 +23,7 @@ def calculate_mean_covariance(D):
 
 def logpdf_GAU_ND(X, mu, C):
 
-    M = X.shape[0]  # numero di features
+    M = X.shape[0]  
     first_term = -0.5 * M * np.log(2*np.pi)
 
     log_det = np.linalg.slogdet(C)[1]
@@ -181,7 +179,7 @@ class GMM:
         self.iterations = iterations
         self.alpha = alpha
         self.psi = psi
-        self.name = name  # Possible Names: GMM, Tied, Diagonal, Tied-Diagonal
+        self.name = name  
         
     def train(self, DTR, LTR, DTE, LTE, prior):
         self.DTR = DTR

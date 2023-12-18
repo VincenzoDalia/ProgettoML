@@ -2,15 +2,16 @@ from Functions.load import *
 from Functions.reshape_functions import *
 from Functions.kfold import *
 from Models.GMM import *
-from Preprocessing.PCA import *
-from Metrics.DCF import *
-from Metrics.ROC import *
-from Preprocessing.ZNorm import *
+from Functions.PCA import *
+from Functions.DCF import *
+from Functions.ROC import *
+from Functions.ZNorm import *
 import matplotlib.pyplot as plt
-from Metrics.BayesErr import *
+from Functions.BayesErr import *
 from Functions.Calibrate import *
 
-### GMM Graphs ##
+
+
 
 def calculate_min_dcf_values(D, L,model, ZNorm=False):
     
@@ -515,8 +516,7 @@ def calibrated_GMM_train_dcf(D, L, prior):
     
 
 
- 
-### GMM Tabelle ##
+
 def run_gmm_model(gmm, components, pi, message, D, L):
     SPost, Label = kfold(D, L, gmm, 5, None)
     res = MIN_DCF(pi, 1, 1, Label, SPost)

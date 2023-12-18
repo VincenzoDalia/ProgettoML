@@ -2,6 +2,7 @@ import numpy as np
 import scipy.optimize as opt
 
 ### Functions for SVM ###
+
 def mCol(v):
     return v.reshape((v.size, 1))
 
@@ -9,7 +10,7 @@ def mRow(array):
     return array.reshape((1,array.size))
 
 def weighted_bounds(C, LTR, priors):
-    emp = np.mean(LTR)  # Calcola la media di LTR per ottenere la percentuale di 1
+    emp = np.mean(LTR)  
     
     bounds = np.zeros_like(LTR, dtype=float)
     bounds[LTR == 1] = C * priors[1] / emp
@@ -19,7 +20,7 @@ def weighted_bounds(C, LTR, priors):
 
 def lagrangian(alpha, H):
     
-    ones =  np.ones(alpha.size) # 66,
+    ones =  np.ones(alpha.size) 
     
     first_term = 0.5 * np.dot(np.dot(alpha.T, H), alpha)
     second_term = np.dot(alpha.T , mCol(ones))
@@ -87,18 +88,14 @@ class Polynomial_SVM:
         
         polynomial_kernel_DTR = (np.dot(self.DTR.T,self.DTR) + self.constant)**self.degree
         
-        #regularize the kernel function by adding K^2
         polynomial_kernel_DTR = polynomial_kernel_DTR + self.K**2
+        
 
         H = Z * Z.T * polynomial_kernel_DTR
 
-        # Compute Dual solution
         alpha = np.zeros(self.DTR.shape[1])
         
-        #bounds_list = [(0,self.C)] * LTR.size
-        
         bounds = weighted_bounds(self.C, self.LTR, [self.prior, 1-self.prior])
-
 
         (x, dual_objective, d) = opt.fmin_l_bfgs_b(lagrangian, x0=alpha, args=(H,), approx_grad=False, bounds=bounds, factr=1.0)
         

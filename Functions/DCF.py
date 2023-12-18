@@ -1,5 +1,5 @@
 import numpy as np
-from Metrics.confusion_matrix import confusionMatrix
+from Functions.confusion_matrix import confusionMatrix
 
 
 def DCF(pi, confMatrix, C_fn, C_fp, normalized):
@@ -21,10 +21,7 @@ def DCF(pi, confMatrix, C_fn, C_fp, normalized):
         
     
 def MIN_DCF(pi, C_fn, C_fp, LTE, scores):
-    
-    #min_dcf è già normalizzato
-    
-    #Aggiungo -inf e +inf a scores (per i due casi limite, tutto classificato come 0 o tutto come 1) e ordino
+
     thresholds = np.concatenate([scores, [-np.inf, np.inf]])
     thresholds.sort()
     

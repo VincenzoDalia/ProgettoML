@@ -2,20 +2,18 @@ from Functions.load import *
 from Functions.reshape_functions import *
 from Functions.kfold import *
 from Models.SVM import *
-from Preprocessing.PCA import *
-from Preprocessing.ZNorm import *
-from Metrics.DCF import *
-from Metrics.ROC import *
+from Functions.PCA import *
+from Functions.ZNorm import *
+from Functions.DCF import *
+from Functions.ROC import *
 import matplotlib.pyplot as plt
-from Metrics.BayesErr import *
+from Functions.BayesErr import *
 from Functions.Calibrate import *
 
 
-###     SVM  GRAPHS    ###
+###  Linear SVM      ###
 
-    ###  Linear SVM      ###
 
-# Grafico in cui fisso K e trovo C ottimale per Raw,ZNorm,PCA,PCA+ZNorm # (Lo eseguo per K=1)
 def svm_comparation_plot(D, L, prior, K):
     C_values = np.logspace(-5, 5, num=15)
     svm = Linear_SVM
@@ -66,7 +64,6 @@ def svm_comparation_plot(D, L, prior, K):
     plt.close()
 
 
-# Grafico RAW con K fissato, con pi che varia per trovare C
 def linear_svm_raw_plot(D, L, prior, K):
     C_values = np.logspace(-5, 5, num=15)
     svm = Linear_SVM
@@ -102,7 +99,6 @@ def linear_svm_raw_plot(D, L, prior, K):
     plt.close()
     
 
-# Grafico ZNorm con K fissato, con pi che varia per trovare C
 def linear_svm_znorm_plot(D, L,prior, K):
     C_values = np.logspace(-5, 5, num=15)
     svm = Linear_SVM
@@ -143,8 +139,6 @@ def linear_svm_znorm_plot(D, L,prior, K):
 
 ###  Polynomial SVM  ###
    
-
-# Grafico RAW con K fissato, con pi che varia per trovare C
 def polynomial_svm_raw_plot(D, L, prior, K):
     C_values = np.logspace(-5, 5, num=15)
     svm = Polynomial_SVM
@@ -183,7 +177,6 @@ def polynomial_svm_raw_plot(D, L, prior, K):
     plt.close()
     
 
-# Grafico ZNorm con K fissato, con pi che varia per trovare C
 def polynomial_svm_znorm_plot(D, L,prior, K):
     C_values = np.logspace(-5, 5, num=15)
     svm = Polynomial_SVM
@@ -319,8 +312,11 @@ def calibrated_SVM_train_dcf(D, L, prior):
     act_dcf = DCF(prior, conf_matrix, 1, 1, True)
     print(f"SVM (train) {prior}     min_dcf: {round(min_dcf, 3)}        act_dcf: {round(act_dcf, 3)}")
  
-
-###     SVM  TABLES    ###
+ 
+ 
+ 
+ 
+ 
 
 def SVM_diff_priors(D, L, ZNorm=False):
     C = 10

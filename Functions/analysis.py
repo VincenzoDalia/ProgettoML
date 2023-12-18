@@ -1,7 +1,7 @@
 from Functions.load import *
 from Functions.reshape_functions import *
+from Functions.LDA import *
 import numpy as np
-import matplotlib
 import matplotlib.pyplot as plt
 from scipy.stats import pearsonr
 
@@ -99,7 +99,7 @@ def plot_scatter_matrix(data, labels):
 
 def plot_LDA_hist(dataset, label, m):
     
-    W1 = LDA1(dataset, label, m)
+    W1 = LDA(dataset, label, m)
     
     y1 = numpy.dot(W1.T, dataset)
 

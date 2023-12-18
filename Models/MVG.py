@@ -2,17 +2,14 @@ import numpy as np
 import scipy
 
 
-
-######           MVG model          ######
+######           MVG functions         ######
 
 
 def vrow(array):
-    # trasforma un array in un vettore riga (1 riga, n colonne)
     return array.reshape((1, array.size))
 
 
 def vcol(array):
-    # trasforma un array in un vettore colonna (n righe, 1 colonna)
     return array.reshape((array.size, 1))
 
 
@@ -26,9 +23,7 @@ def calculate_mean_covariance(D):
 
 def acc_err_evaluate(Predicted_labels, Real_labels):
 
-    # create an array of boolean with correct and uncorrect predictions
     result = np.array(Real_labels == Predicted_labels)
-    # summing an array of boolean returns the number of true values
     acc = 100*(result.sum())/len(Real_labels)
     err = 100-acc
 
@@ -37,9 +32,9 @@ def acc_err_evaluate(Predicted_labels, Real_labels):
 def evaluate_accuracy(Posterior_prob,Real_labels):
     
     Predicted_labels = np.argmax(Posterior_prob,0)
-    result = np.array([Real_labels[i] == Predicted_labels[i] for i in range(len(Real_labels))]) # create an array of boolean with correct and uncorrect predictions
+    result = np.array([Real_labels[i] == Predicted_labels[i] for i in range(len(Real_labels))]) 
 
-    acc = 100*(result.sum())/len(Real_labels) # summing an array of boolean returns the number of true values
+    acc = 100*(result.sum())/len(Real_labels) 
     
     return acc
 
@@ -47,7 +42,7 @@ def evaluate_accuracy(Posterior_prob,Real_labels):
 
 def logpdf_GAU_ND(X, mu, C):
 
-    M = X.shape[0]  # numero di features
+    M = X.shape[0]  
     first_term = -0.5 * M * np.log(2*np.pi)
 
     log_det = np.linalg.slogdet(C)[1]
@@ -61,6 +56,11 @@ def logpdf_GAU_ND(X, mu, C):
     logpdf = first_term + second_term + third_term
 
     return logpdf
+
+
+
+
+######           MVG models         ######
     
 
 class LogGaussian_Classifier:
@@ -78,23 +78,17 @@ class LogGaussian_Classifier:
         
         S = []
     
-        #Calcolo la probabilità condizionata per ogni classe e per ogni elemento del test set
         for i in range(self.LTR.max()+1):
             
             DTR_i = self.DTR[:, self.LTR == i]
             mean_i, cov_i = calculate_mean_covariance(DTR_i)
             class_conditional_prob = logpdf_GAU_ND(self.DTE, mean_i, cov_i)
-            
-            #Uso vrow per trasformare il vettore in una matrice riga (1 riga, n colonne) 
-            #per poterlo concatenare con le altre matrici riga dentro S
             S.append(vrow(class_conditional_prob))
             
         S = np.vstack(S)
         
         prior = np.ones(S.shape)*[[self.prior], [1-self.prior]]
         
-        #Al posto di moltiplicare per prior, sommo il logaritmo di prior
-        #sfruttando la proprietà log(a*b) = log(a) + log(b) 
         logSJoint = S + np.log(prior)
         
         logSMargin = vrow(scipy.special.logsumexp(logSJoint, axis=0))
@@ -126,21 +120,14 @@ class NBGaussian_Classifier:
             
             DTR_i = self.DTR[:, self.LTR == i]
             mean_i, cov_i = calculate_mean_covariance(DTR_i)
-            
-            #in questo caso la covarianza è diagonale e quindi devo moltiplicarla per la matrice identità
             identity = np.identity(cov_i.shape[0])
             cov_i = cov_i*identity
-
             class_conditional_prob = logpdf_GAU_ND(self.DTE, mean_i, cov_i)
-
             S.append(vrow(class_conditional_prob))
             
         S = np.vstack(S)
         
         prior = np.ones(S.shape)*[[self.prior], [1-self.prior]]
-        
-        #Al posto di moltiplicare per prior, sommo il logaritmo di prior
-        #sfruttando la proprietà log(a*b) = log(a) + log(b) 
         logSJoint = S + np.log(prior)
         logSMargin = vrow(scipy.special.logsumexp(logSJoint, axis=0))
         logSPost = logSJoint - logSMargin
@@ -169,20 +156,17 @@ class TiedGaussian_Classifier:
         
         S = []
     
-        #calcolo la matrice di covarianza condivisa
         tied_cov = 0
-        n_tot_samples = self.DTR.shape[1] #numero di campioni TOTALI
+        n_tot_samples = self.DTR.shape[1]
         
         for i in range(self.LTR.max()+1):
             
             DTR_i = self.DTR[:, self.LTR == i]
-            n_class_samples = DTR_i.shape[1] #numero di campioni per classe  
+            n_class_samples = DTR_i.shape[1]   
             cov_i = calculate_mean_covariance(DTR_i)[1]
-            tied_cov += n_class_samples*cov_i #moltiplico la covarianza per il numero di campioni per classe per annullare l'effetto della cardinalità delle classi
-            
-        tied_cov = tied_cov/n_tot_samples #covarianza condivisa
+            tied_cov += n_class_samples*cov_i 
+        tied_cov = tied_cov/n_tot_samples 
         
-        #Calcolo la probabilità condizionata per ogni classe e per ogni elemento del test set
         for i in range(LTR.max()+1):
             
             DTR_i = DTR[:, LTR == i]
@@ -223,33 +207,27 @@ class TiedNBGaussian_Classifier:
         
         S = []
     
-        #calcolo la matrice di covarianza condivisa
         tied_cov = 0
-        n_tot_samples = self.DTR.shape[1] #numero di campioni TOTALI
+        n_tot_samples = self.DTR.shape[1] 
         
         for i in range(self.LTR.max()+1):
             
             DTR_i = self.DTR[:, self.LTR == i]
-            n_class_samples = DTR_i.shape[1] #numero di campioni per classe  
+            n_class_samples = DTR_i.shape[1]  
             cov_i = calculate_mean_covariance(DTR_i)[1]
-            tied_cov += n_class_samples*cov_i #moltiplico la covarianza per il numero di campioni per classe per annullare l'effetto della cardinalità delle classi
+            tied_cov += n_class_samples*cov_i 
             
         
-        tied_cov = tied_cov/n_tot_samples #covarianza condivisa
+        tied_cov = tied_cov/n_tot_samples 
         
-        #Assunzione Naive Bayes: covarianza diagonale
         identity = np.identity(cov_i.shape[0])
         tied_cov = tied_cov*identity
         
-        #Calcolo la probabilità condizionata per ogni classe e per ogni elemento del test set
         for i in range(LTR.max()+1):
             
             DTR_i = DTR[:, LTR == i]
             mean_i, cov_i = calculate_mean_covariance(DTR_i)
             class_conditional_prob = logpdf_GAU_ND(DTE, mean_i, tied_cov)
-            
-            #Uso vrow per trasformare il vettore in una matrice riga (1 riga, n colonne) 
-            #per poterlo concatenare con le altre matrici riga dentro S
             S.append(vrow(class_conditional_prob))
             
         S = np.vstack(S)

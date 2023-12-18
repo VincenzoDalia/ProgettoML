@@ -3,7 +3,6 @@ import numpy as np
 
 def confusionMatrix(Real,Predicted):
     
-    # n classes
     K = Real.max()+1 
     
     confMatrix = np.zeros((K,K), dtype=int)

@@ -2,12 +2,12 @@ from Functions.load import *
 from Functions.reshape_functions import *
 from Functions.kfold import *
 from Models.GMM import *
-from Preprocessing.PCA import *
-from Metrics.DCF import *
-from Metrics.ROC import *
-from Preprocessing.ZNorm import *
+from Functions.PCA import *
+from Functions.DCF import *
+from Functions.ROC import *
+from Functions.ZNorm import *
 import matplotlib.pyplot as plt
-from Metrics.BayesErr import *
+from Functions.BayesErr import *
 from Functions.Calibrate import *
 
 def GMM_candidate_test(DTR,LTR,DTE,LTE):

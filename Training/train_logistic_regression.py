@@ -1,13 +1,12 @@
 import numpy as np
-from Metrics.DCF import *
+from Functions.DCF import *
 from Functions.kfold import kfold
-from Preprocessing.PCA import PCA
-from Preprocessing.ZNorm import znorm
+from Functions.PCA import PCA
+from Functions.ZNorm import znorm
 from Models.LogisticRegression import BinaryLogisticRegression, QuadraticLogisticRegression
 import matplotlib.pyplot as plt
-from functools import partial
 from Functions.Calibrate import *
-from Metrics.BayesErr import *
+from Functions.BayesErr import *
 
 def plot_results(min_dcf_05, min_dcf_01, min_dcf_09, name, title):
     lambda_values = np.logspace(-5, 5, num=21)
@@ -35,6 +34,7 @@ def calculate_min_dcf_linear(D, L, prior, regression, l_values):
                for l in l_values 
                for SPost, Label in [kfold(D, L, regression(l), 5, prior)]]
     return zip(*results)
+
 
 # Comparation plot with raw, znorm, pca 11 and pca 11 + znorm
 def comparation_plot(D, L, prior):
@@ -81,6 +81,7 @@ def comparation_plot(D, L, prior):
     plt.legend(loc='upper left')
     plt.savefig("Training/Logistic_Regression_Plot/Linear Logistic Regression Comparison.pdf")
     plt.close()
+    
     
 # Comparation plot 2 with PCA 10 and 9 (with and without znorm)
 def comparation_plot_2(D, L, prior):
@@ -350,6 +351,8 @@ def calibrated_LR_train_dcf(D, L, prior):
     act_dcf = DCF(prior, conf_matrix, 1, 1, True)
     print(f"LR (train) {prior}     min_dcf: {round(min_dcf, 3)}        act_dcf: {round(act_dcf, 3)}")
    
+  
+  
   
 ### ---------------------- Quadratic Logistic Regression ---------------------- ###
 

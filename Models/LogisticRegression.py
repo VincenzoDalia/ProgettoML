@@ -1,7 +1,8 @@
 import numpy as np
-import sklearn.datasets
 import scipy.optimize
 
+
+###   Logistic Regression Functions   ###
 
 def polynomial_transformation(DTR, DTE):
     n_train = DTR.shape[1]
@@ -20,6 +21,8 @@ def polynomial_transformation(DTR, DTE):
     return quad_dtr, quad_dte
 
 
+
+###  Logistic Regression Models   ###
 
 class BinaryLogisticRegression:
     def __init__(self, l):
