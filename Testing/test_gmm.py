@@ -72,19 +72,19 @@ def TiedGMM_EVAL(DTR, LTR, DTE, LTE, prior):
         res_eval_znorm = MIN_DCF(0.5, 1, 1, LTE, scores)
         min_dcf_results_znorm_eval.append(res_eval_znorm)
         
-        print(f"Fold {i} done")
+        print(f"{i} done")
         
     plt.figure()
     
     iterations = range(5)
-    x_axis = np.arange(len(iterations))
+    x_axis = np.arange(len(iterations)) * 1.25
     bounds = np.array(iterations)
     
     plt.title("Tied GMM and Tied GMM + Znorm")
     
-    plt.bar( x_axis+0.75, min_dcf_results, label="Training", color="orange", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
-    plt.bar( x_axis+0.75, min_dcf_results_eval, label="Evaluation", color="blue", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
-    plt.bar( x_axis+0.75, min_dcf_results_znorm, label="Training Z-Norm", color="green", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
+    plt.bar( x_axis-0.00, min_dcf_results, label="Training", color="orange", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
+    plt.bar( x_axis+0.25, min_dcf_results_eval, label="Evaluation", color="blue", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
+    plt.bar( x_axis+0.50, min_dcf_results_znorm, label="Training Z-Norm", color="green", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
     plt.bar( x_axis+0.75, min_dcf_results_znorm_eval, label="Evaluation Z-Norm", color="red", alpha=0.5, width=0.25, edgecolor="black", linewidth=1)
     
     plt.xticks([r * 1.25 + 0.375 for r in range(len(bounds))], [2**i for i in bounds])
