@@ -57,7 +57,7 @@ class Linear_SVM:
         
         bounds = weighted_bounds(self.C, self.LTR, [self.prior, 1-self.prior])
 
-        (x, f, d) = opt.fmin_l_bfgs_b(lagrangian, x0=alpha, args=(H,), approx_grad=False, bounds=bounds, factr=1.0)
+        (x, _, _) = opt.fmin_l_bfgs_b(lagrangian, x0=alpha, args=(H,), approx_grad=False, bounds=bounds, factr=1.0)
         
         self.w = np.sum( mCol(x) * mCol(Z) * D.T,  axis=0 )
         self.DTE = np.vstack([self.DTE, np.ones(self.DTE.shape[1]) * self.K])
@@ -97,7 +97,7 @@ class Polynomial_SVM:
         
         bounds = weighted_bounds(self.C, self.LTR, [self.prior, 1-self.prior])
 
-        (x, dual_objective, d) = opt.fmin_l_bfgs_b(lagrangian, x0=alpha, args=(H,), approx_grad=False, bounds=bounds, factr=1.0)
+        (x, _, _) = opt.fmin_l_bfgs_b(lagrangian, x0=alpha, args=(H,), approx_grad=False, bounds=bounds, factr=1.0)
         
         self.alpha = x
         
@@ -132,7 +132,7 @@ class Radial_SVM:
         x0 = np.zeros(LTR.size)  
         bounds = weighted_bounds(self.C, self.LTR, [self.prior, 1-self.prior])
         
-        (alpha_star, dual_objective, d) = opt.fmin_l_bfgs_b(lagrangian,args=(H,), approx_grad=False, x0=x0, bounds=bounds, factr=1.0)
+        (alpha_star, _, _) = opt.fmin_l_bfgs_b(lagrangian,args=(H,), approx_grad=False, x0=x0, bounds=bounds, factr=1.0)
 
         self.alpha = alpha_star
 
